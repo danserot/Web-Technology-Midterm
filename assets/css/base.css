@@ -153,7 +153,7 @@ img {
 .footer-team-label {
   color: var(--lime);
   font-weight: 700;
-  letter-spacing: .04em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 .footer-content p {
@@ -214,15 +214,15 @@ img {
     order: 3;
     flex-basis: 100%;
   }
-    .footer-team {
-      order: 2;
-      flex-basis: 100%;
-      flex-wrap: wrap;
-      gap: 4px 8px;
-      justify-content: flex-start;
-      text-align: left;
-    }
-    .footer-team span + span::before {
-      margin-right: 8px;
-    }
+  .footer-team {
+    order: 2;
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    justify-content: flex-start;
+    text-align: left;
+  }
+  .footer-team span + span::before {
+    margin-right: 8px;
+  }
 }

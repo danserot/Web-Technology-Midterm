@@ -106,7 +106,6 @@
 
         <p class="booking-description">
           Add your details and we’ll prepare your rental summary.
-          No payment is required for this demo.
         </p>
 
 
@@ -149,6 +148,30 @@
               placeholder="+7 700 000 00 00"
               required />
           </div>
+
+          <div class="booking-dates">
+
+          <div class="booking-field">
+            <label for="pickupDate">Pick-up date</label>
+            <input
+              class="form-control"
+              type="date"
+              id="pickupDate"
+              name="pickupDate"
+              required>
+          </div>
+
+          <div class="booking-field">
+            <label for="returnDate">Return date</label>
+            <input
+              class="form-control"
+              type="date"
+              id="returnDate"
+              name="returnDate"
+              required>
+          </div>
+
+        </div>
 
 
           <div class="form-check booking-agreement">
@@ -218,35 +241,35 @@
             </div>
 
 
-            <div class="summary-details">
+          <div class="summary-details">
 
-              <div>
-                <p>Pick-up</p>
-                <p>18 Sep 2026</p>
-              </div>
-
-              <div>
-                <p>Return</p>
-                <p>21 Sep 2026</p>
-              </div>
-
-              <div>
-                <p>Location</p>
-                <p>Astana Downtown</p>
-              </div>
-
+            <div class="summary-row">
+              <p>Pick-up</p>
+              <p id="summaryPickup">Choose date</p>
             </div>
+
+            <div class="summary-row">
+              <p>Return</p>
+              <p id="summaryReturn">Choose date</p>
+            </div>
+
+            <div class="summary-row">
+              <p>Location</p>
+              <p>Astana Downtown</p>
+            </div>
+
+          </div>
 
 
             <div class="summary-price">
-
               <div>
-                <span id="summaryPricePerDay">
-                  $164 / day
-                </span>
-
+                <p id="summaryCalculation">
+                    Select dates to calculate total
+                </p>
                 <small>Taxes included</small>
               </div>
+
+              <strong id="summaryTotal">—</strong>
 
             </div>
 
@@ -255,6 +278,22 @@
         </div>
 
       </aside>
+    </div>
+
+    <div
+      class="booking-confirmation d-none"
+      id="bookingConfirmation">
+
+      <div class="confirmation-icon">✓</div>
+
+      <p class="booking-eyebrow">Сonfirmation</p>
+
+      <h2>Booking details confirmed.</h2>
+
+      <p id="confirmationMessage">
+        Your rental summary is ready.
+      </p>
+
     </div>
   </section>
 </main>

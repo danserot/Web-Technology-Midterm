@@ -136,6 +136,26 @@ img {
   color: #f6fbf7;
   font-size: 12px;
 }
+.footer-team {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #b6c9bd;
+  font-size: 9px;
+  text-align: center;
+}
+.footer-team span + span::before {
+  margin-right: 8px;
+  color: var(--lime);
+  content: "•";
+}
+.footer-team-label {
+  color: var(--lime);
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
 .footer-content p {
   margin: 0;
   color: #a9bdb2;
@@ -194,4 +214,15 @@ img {
     order: 3;
     flex-basis: 100%;
   }
+    .footer-team {
+      order: 2;
+      flex-basis: 100%;
+      flex-wrap: wrap;
+      gap: 4px 8px;
+      justify-content: flex-start;
+      text-align: left;
+    }
+    .footer-team span + span::before {
+      margin-right: 8px;
+    }
 }

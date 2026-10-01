@@ -48,11 +48,10 @@
 }
 
 .progress-step.completed .step-number {
-  border-color: var(--deep-green);
+  border-color: #7f8b84;
   color: var(--white);
-  background: var(--deep-green);
+  background: #7f8b84;
 }
-
 .progress-line {
   width: 75px;
   height: 1px;
@@ -61,7 +60,7 @@
 }
 
 .progress-line.completed {
-  background: #91aa9d;
+  background: #7f8b84;
 }
 
 .booking-layout {

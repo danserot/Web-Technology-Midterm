@@ -168,6 +168,27 @@ bookingForm.addEventListener("submit", function (event) {
 
   bookingConfirmation.classList.remove("d-none");
 
+  const stepDetails =
+  document.getElementById("stepDetails");
+
+  const stepConfirmation =
+  document.getElementById("stepConfirmation");
+
+  const lineDetails =
+  document.getElementById("lineDetails");
+
+
+stepDetails.classList.remove("active");
+stepDetails.classList.add("completed");
+
+stepDetails.querySelector(".step-number").textContent = "✓";
+
+
+lineDetails.classList.add("completed");
+
+
+stepConfirmation.classList.add("active");
+
   bookingConfirmation.scrollIntoView({
     behavior: "smooth"
   });

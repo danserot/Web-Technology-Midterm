@@ -291,6 +291,117 @@
 }
 
 
+/* =========================
+   Car Comparison
+   ========================= */
+
+.car-comparison {
+  padding-top: 46px;
+  padding-bottom: 20px;
+}
+
+.comparison-heading {
+  margin-bottom: 16px;
+}
+
+.comparison-heading .catalog-eyebrow {
+  margin-bottom: 8px;
+}
+
+.comparison-heading h2 {
+  margin-bottom: 4px;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.comparison-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.comparison-table-wrapper {
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.comparison-table {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+}
+
+.comparison-table caption {
+  padding: 12px 16px 8px;
+  color: var(--muted);
+  font-size: 9px;
+  text-align: left;
+  caption-side: top;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.comparison-table thead th {
+  color: #7f8b84;
+  background: #f5f7f5;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.comparison-table tbody th {
+  color: var(--ink);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.comparison-table tbody td {
+  color: #6f7b74;
+  font-size: 10px;
+}
+
+.comparison-table tbody tr:last-child th,
+.comparison-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.comparison-table tbody tr {
+  transition: background 160ms ease;
+}
+
+.comparison-table tbody tr:hover {
+  background: #fafcf9;
+}
+
+.comparison-table strong {
+  color: var(--ink);
+  font-size: 11px;
+}
+
+.table-category {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: var(--deep-green);
+  background: #edf3ed;
+  font-size: 8px;
+  font-weight: 600;
+}
+
+
+
 @media (max-width: 991px) {
   .catalog-hero {
     grid-template-columns: 40% 1fr;
@@ -381,4 +492,17 @@
 .editor-image img {
   height: 190px;
 }   
+
+.car-comparison {
+  padding-top: 36px;
+}
+
+.comparison-heading h2 {
+  font-size: 22px;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 12px 14px;
+}
 }

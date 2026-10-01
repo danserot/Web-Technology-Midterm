@@ -75,8 +75,7 @@
     <div class="booking-progress" aria-label="Booking progress">
 
       <div
-        class="progress-step completed"
-        id="stepChoose">
+        class="progress-step completed">
 
         <span class="step-number">✓</span>
         <span>Choose car</span>
@@ -85,14 +84,12 @@
 
 
       <div
-        class="progress-line completed"
-        id="lineChoose">
+        class="progress-line completed">
       </div>
 
 
       <div
-        class="progress-step active"
-        id="stepDetails">
+        class="progress-step active">
 
         <span class="step-number">2</span>
         <span>Your details</span>
@@ -101,14 +98,12 @@
 
 
       <div
-        class="progress-line"
-        id="lineDetails">
+        class="progress-line">
       </div>
 
 
       <div
-        class="progress-step"
-        id="stepConfirmation">
+        class="progress-step">
 
         <span class="step-number">3</span>
         <span>Confirmation</span>
@@ -130,7 +125,7 @@
         </p>
 
 
-        <form id="bookingForm">
+        <form id="bookingForm" action="#confirmation">
 
           <div class="booking-field">
             <label for="fullName">Full name</label>
@@ -192,7 +187,7 @@
               required>
           </div>
 
-        </div>
+          </div>
 
 
           <div class="form-check booking-agreement">
@@ -228,11 +223,11 @@
       <aside class="trip-summary">
 
         <h2>Trip summary</h2>
+        <p class="demo-label">Demo booking example</p>
 
         <div class="summary-card">
 
           <img
-            id="summaryCarImage"
             class="summary-car-image"
             src="assets/images/porsche_macan.png"
             alt="Selected car" />
@@ -243,19 +238,18 @@
             <div class="summary-car-heading">
 
               <div>
-                <h3 id="summaryCarName">
+                <h3>
                   Porsche Macan
                 </h3>
 
-                <p id="summaryCarType">
+                <p>
                   Sporty SUV
                 </p>
               </div>
 
 
               <span
-                class="summary-category"
-                id="summaryCarCategory">
+                class="summary-category">
                 Performance
               </span>
 
@@ -266,12 +260,12 @@
 
             <div class="summary-row">
               <p>Pick-up</p>
-              <p id="summaryPickup">Choose date</p>
+              <p>October 15, 2026</p>
             </div>
 
             <div class="summary-row">
               <p>Return</p>
-              <p id="summaryReturn">Choose date</p>
+              <p>October 18, 2026</p>
             </div>
 
             <div class="summary-row">
@@ -284,13 +278,11 @@
 
             <div class="summary-price">
               <div>
-                <p id="summaryCalculation">
-                    Select dates to calculate total
-                </p>
+                <p>3 days x $164 / day</p>
+
                 <small>Taxes included</small>
               </div>
-
-              <strong id="summaryTotal">—</strong>
+              <strong>$492</strong>
 
             </div>
 
@@ -301,21 +293,22 @@
       </aside>
     </div>
 
-    <div
-      class="booking-confirmation d-none"
-      id="bookingConfirmation">
+      <div
+        class="booking-confirmation"
+        id="confirmation">
 
-      <div class="confirmation-icon">✓</div>
+        <div class="confirmation-icon">✓</div>
 
-      <p class="booking-eyebrow">Confirmation</p>
+        <p class="booking-eyebrow">
+          Confirmation
+        </p>
 
-      <h2>Booking details confirmed.</h2>
+        <h2>Booking confirmed.</h2>
 
-      <p id="confirmationMessage">
-        Your rental summary is ready.
-      </p>
-
-    </div>
+        <p>
+          Porsche Macan · October 15–18 · $492
+        </p>
+      </div>
   </section>
 </main>
 
@@ -338,6 +331,5 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/booking.js"></script>
   </body>
 </html>

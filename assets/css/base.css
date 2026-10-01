@@ -148,7 +148,7 @@ img {
 .footer-team span + span::before {
   margin-right: 8px;
   color: var(--lime);
-  content: "•";
+  content: "/";
 }
 .footer-team-label {
   color: var(--lime);

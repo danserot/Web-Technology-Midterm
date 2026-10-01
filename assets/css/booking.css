@@ -217,13 +217,6 @@
   padding: 4px 0;
 }
 
-.summary-details div {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 8px 0;
-}
-
 .summary-row {
   display: flex;
   justify-content: space-between;
@@ -327,12 +320,12 @@
 @media (max-width: 991px) {
 
   .booking-layout {
-    gap: 40px;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 35px;
   }
 
-  .booking-dates {
-  grid-template-columns: 1fr;
-  gap: 0;
+  .booking-page {
+    padding-top: 34px;
 }
 }
 
@@ -351,6 +344,7 @@
     flex-direction: column;
     gap: 5px;
     text-align: center;
+    font-size: 8px;
   }
 
   .progress-line {
@@ -371,7 +365,25 @@
     width: 100%;
   }
 
+  .booking-description {
+    font-size: 10px;
+  }
+
+    .booking-dates {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
   .summary-car-image {
     height: 190px;
   }
+
+    .booking-confirmation {
+    margin-top: 32px;
+    padding: 24px 18px;
+  }
+
+  .booking-confirmation h2 {
+    font-size: 21px;
+  } 
 }

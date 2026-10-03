@@ -75,3 +75,32 @@
   background: var(--white);
   box-shadow: var(--shadow);
 }
+
+.type-target {
+  display: block;
+  height: 0; 
+  scroll-margin-top: 24px;
+}
+
+.type-row { 
+  padding: 6px 6px 12px;
+  border-bottom: 1px solid var(--line); 
+}
+
+.filter-label { margin-bottom: 8px; color: #8a958e; font-size: 10px; }
+
+.type-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+
+.type-pill {
+  display: inline-block;
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: #55635b;
+  background: var(--paper);
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 160ms ease;
+}
+
+.type-pill:hover { background: #edf3ed; }

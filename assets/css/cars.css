@@ -1,0 +1,77 @@
+.cars-page { 
+    padding-top: 48px;
+ }
+
+.cars-heading { 
+    margin-bottom: 26px;
+}
+
+.cars-eyebrow {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: #637a6c;
+  background: #edf3ed;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.cars-heading h1 {
+  margin-bottom: 8px;
+  font-size: clamp(32px, 4vw, 46px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+}
+
+.cars-heading p { 
+    margin: 0;
+     color: var(--muted); 
+     font-size: 13px; }
+
+
+.trip-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 12px;
+  padding: 12px 18px;
+  border: 1px solid #e8ede9;
+  border-radius: 14px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.trip-summary-text { 
+  display: flex;
+  flex-wrap: wrap; 
+  align-items: baseline; 
+  gap: 4px 14px; 
+  margin: 0;
+  font-size: 12px; 
+}
+
+
+.trip-label { 
+    color: #8a958e; 
+    font-size: 10px; }
+
+
+.trip-change { 
+    color: var(--deep-green); 
+    font-size: 11px; 
+    font-weight: 600; 
+    text-decoration: underline; 
+    text-underline-offset: 3px; }
+
+
+.cars-search {
+  padding: 10px;
+  border: 1px solid #e8ede9;
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+}

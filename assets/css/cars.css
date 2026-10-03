@@ -104,3 +104,66 @@
 }
 
 .type-pill:hover { background: #edf3ed; }
+
+
+.cars-page:not(:has(:target)) a[href="#cat-all"],
+.cars-page:has(#cat-all:target) a[href="#cat-all"],
+.cars-page:has(#cat-suv:target) a[href="#cat-suv"],
+.cars-page:has(#cat-electric:target) a[href="#cat-electric"],
+.cars-page:has(#cat-compact:target) a[href="#cat-compact"],
+.cars-page:has(#cat-luxury:target) a[href="#cat-luxury"],
+.cars-page:has(#cat-convertible:target) a[href="#cat-convertible"],
+.cars-page:has(#cat-van:target) a[href="#cat-van"] {
+  border-color: var(--lime);
+  color: var(--deep-green);
+  background: var(--lime);
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 12px 6px 4px;
+}
+
+.filter-field { 
+    flex: 1 1 150px; 
+    min-width: 130px; }
+
+.filter-field label {
+  display: block;
+  margin-bottom: 4px;
+  color: #8a958e;
+  font-size: 10px;
+}
+
+.filter-field .form-select {
+  border-color: var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  background-color: var(--paper);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.filter-field .form-select:focus {
+  border-color: var(--deep-green);
+  box-shadow: 0 0 0 3px rgba(186, 250, 69, 0.45);
+}
+
+.filter-reset {
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--deep-green);
+  background: transparent;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+

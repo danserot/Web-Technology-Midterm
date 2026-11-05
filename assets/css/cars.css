@@ -124,6 +124,8 @@
     flex: 1 1 150px; 
     min-width: 130px; }
 
+.filter-field-search { flex-basis: 190px; }
+
 .filter-field label {
   display: block;
   margin-bottom: 4px;
@@ -140,7 +142,21 @@
   font-weight: 600;
 }
 
+.filter-field .form-control {
+  border-color: var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  background-color: var(--paper);
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .filter-field .form-select:focus {
+  border-color: var(--deep-green);
+  box-shadow: 0 0 0 3px rgba(186, 250, 69, 0.45);
+}
+
+.filter-field .form-control:focus {
   border-color: var(--deep-green);
   box-shadow: 0 0 0 3px rgba(186, 250, 69, 0.45);
 }

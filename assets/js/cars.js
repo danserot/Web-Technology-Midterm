@@ -3,10 +3,11 @@ const resultsCount = document.getElementById("resultsCount");
 const carsEmpty = document.getElementById("carsEmpty");
 const carsForm = document.getElementById("carsForm");
 const categoryLinks = [...document.querySelectorAll(".type-pill")];
+const searchInput = document.getElementById("carSearch");
 const priceSelect = document.getElementById("filterPrice");
 const seatsSelect = document.getElementById("filterSeats");
 const fuelSelect = document.getElementById("filterFuel");
-const filters = { category: "all", price: "all", seats: "all", fuel: "all" };
+const filters = { category: "all", price: "all", seats: "all", fuel: "all", query: "" };
 
 function createCarCard(car) {
   const column = document.createElement("div");
@@ -73,8 +74,9 @@ function filterCars() {
       (filters.price === "high" && car.price > 150);
     const seatsMatch = filters.seats === "all" || car.seats === Number(filters.seats);
     const fuelMatches = filters.fuel === "all" || car.fuel === filters.fuel;
+    const nameMatches = car.name.toLowerCase().includes(filters.query);
 
-    return categoryMatches && priceMatches && seatsMatch && fuelMatches;
+    return categoryMatches && priceMatches && seatsMatch && fuelMatches && nameMatches;
   });
 }
 
@@ -108,12 +110,18 @@ for (const [select, key] of [
   });
 }
 
+searchInput.addEventListener("input", () => {
+  filters.query = searchInput.value.trim().toLowerCase();
+  applyFilters();
+});
+
 carsForm.addEventListener("reset", (event) => {
   event.preventDefault();
+  searchInput.value = "";
   priceSelect.value = "all";
   seatsSelect.value = "all";
   fuelSelect.value = "all";
-  Object.assign(filters, { category: "all", price: "all", seats: "all", fuel: "all" });
+  Object.assign(filters, { category: "all", price: "all", seats: "all", fuel: "all", query: "" });
   window.history.replaceState(null, "", window.location.pathname + window.location.search);
   applyFilters();
 });

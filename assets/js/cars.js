@@ -8,6 +8,7 @@ const priceSelect = document.getElementById("filterPrice");
 const seatsSelect = document.getElementById("filterSeats");
 const fuelSelect = document.getElementById("filterFuel");
 const filters = { category: "all", price: "all", seats: "all", fuel: "all", query: "" };
+const categoryHashes = new Set(categoryLinks.map((link) => link.hash));
 
 function createCarCard(car) {
   const column = document.createElement("div");
@@ -90,14 +91,22 @@ function applyFilters() {
   }
 }
 
+function applyCategoryFromHash() {
+  filters.category = categoryHashes.has(window.location.hash)
+    ? window.location.hash.slice(5)
+    : "all";
+  applyFilters();
+}
+
 for (const link of categoryLinks) {
   link.addEventListener("click", (event) => {
     event.preventDefault();
-    filters.category = link.hash.slice(5);
-    window.history.replaceState(null, "", link.hash);
-    applyFilters();
+    window.location.hash = link.hash;
+    applyCategoryFromHash();
   });
 }
+
+window.addEventListener("hashchange", applyCategoryFromHash);
 
 for (const [select, key] of [
   [priceSelect, "price"],
@@ -126,4 +135,11 @@ carsForm.addEventListener("reset", (event) => {
   applyFilters();
 });
 
-applyFilters();
+carGrid.addEventListener("click", (event) => {
+  const selectLink = event.target.closest(".rental-select");
+  if (selectLink) {
+    window.localStorage.setItem("selectedCarId", selectLink.dataset.carId);
+  }
+});
+
+applyCategoryFromHash();

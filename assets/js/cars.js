@@ -1,6 +1,12 @@
 const carGrid = document.getElementById("carGrid");
 const resultsCount = document.getElementById("resultsCount");
 const carsEmpty = document.getElementById("carsEmpty");
+const carsForm = document.getElementById("carsForm");
+const categoryLinks = [...document.querySelectorAll(".type-pill")];
+const priceSelect = document.getElementById("filterPrice");
+const seatsSelect = document.getElementById("filterSeats");
+const fuelSelect = document.getElementById("filterFuel");
+const filters = { category: "all", price: "all", seats: "all", fuel: "all" };
 
 function createCarCard(car) {
   const column = document.createElement("div");
@@ -57,4 +63,59 @@ function renderCars(carsToRender) {
   carsEmpty.hidden = carsToRender.length > 0;
 }
 
-renderCars(window.RentoCar.cars);
+function filterCars() {
+  return window.RentoCar.cars.filter((car) => {
+    const categoryMatches = filters.category === "all" || car.category === filters.category;
+    const priceMatches =
+      filters.price === "all" ||
+      (filters.price === "low" && car.price < 100) ||
+      (filters.price === "mid" && car.price >= 100 && car.price <= 150) ||
+      (filters.price === "high" && car.price > 150);
+    const seatsMatch = filters.seats === "all" || car.seats === Number(filters.seats);
+    const fuelMatches = filters.fuel === "all" || car.fuel === filters.fuel;
+
+    return categoryMatches && priceMatches && seatsMatch && fuelMatches;
+  });
+}
+
+function applyFilters() {
+  renderCars(filterCars());
+  for (const link of categoryLinks) {
+    link.setAttribute(
+      "aria-current",
+      link.hash === `#cat-${filters.category}` ? "true" : "false",
+    );
+  }
+}
+
+for (const link of categoryLinks) {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    filters.category = link.hash.slice(5);
+    window.history.replaceState(null, "", link.hash);
+    applyFilters();
+  });
+}
+
+for (const [select, key] of [
+  [priceSelect, "price"],
+  [seatsSelect, "seats"],
+  [fuelSelect, "fuel"],
+]) {
+  select.addEventListener("change", () => {
+    filters[key] = select.value;
+    applyFilters();
+  });
+}
+
+carsForm.addEventListener("reset", (event) => {
+  event.preventDefault();
+  priceSelect.value = "all";
+  seatsSelect.value = "all";
+  fuelSelect.value = "all";
+  Object.assign(filters, { category: "all", price: "all", seats: "all", fuel: "all" });
+  window.history.replaceState(null, "", window.location.pathname + window.location.search);
+  applyFilters();
+});
+
+applyFilters();

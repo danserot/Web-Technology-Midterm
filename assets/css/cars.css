@@ -106,14 +106,7 @@
 .type-pill:hover { background: #edf3ed; }
 
 
-.cars-page:not(:has(:target)) a[href="#cat-all"],
-.cars-page:has(#cat-all:target) a[href="#cat-all"],
-.cars-page:has(#cat-suv:target) a[href="#cat-suv"],
-.cars-page:has(#cat-electric:target) a[href="#cat-electric"],
-.cars-page:has(#cat-compact:target) a[href="#cat-compact"],
-.cars-page:has(#cat-luxury:target) a[href="#cat-luxury"],
-.cars-page:has(#cat-convertible:target) a[href="#cat-convertible"],
-.cars-page:has(#cat-van:target) a[href="#cat-van"] {
+.type-pill[aria-current="true"] {
   border-color: var(--lime);
   color: var(--deep-green);
   background: var(--lime);
@@ -131,6 +124,8 @@
     flex: 1 1 150px; 
     min-width: 130px; }
 
+.filter-field-search { flex-basis: 190px; }
+
 .filter-field label {
   display: block;
   margin-bottom: 4px;
@@ -147,7 +142,21 @@
   font-weight: 600;
 }
 
+.filter-field .form-control {
+  border-color: var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  background-color: var(--paper);
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .filter-field .form-select:focus {
+  border-color: var(--deep-green);
+  box-shadow: 0 0 0 3px rgba(186, 250, 69, 0.45);
+}
+
+.filter-field .form-control:focus {
   border-color: var(--deep-green);
   box-shadow: 0 0 0 3px rgba(186, 250, 69, 0.45);
 }
@@ -168,32 +177,11 @@
 }
 
 
-.cars-page:has(#cat-suv:target) [data-car]:not([data-type="suv"]) { display: none; }
-.cars-page:has(#cat-electric:target) [data-car]:not([data-type="electric"]) { display: none; }
-.cars-page:has(#cat-compact:target) [data-car]:not([data-type="compact"]) { display: none; }
-.cars-page:has(#cat-luxury:target) [data-car]:not([data-type="luxury"]) { display: none; }
-.cars-page:has(#cat-convertible:target) [data-car]:not([data-type="convertible"]) { display: none; }
-.cars-page:has(#cat-van:target) [data-car]:not([data-type="van"]) { display: none; }
-.cars-page:has(#filterPrice option[value="low"]:checked) [data-car]:not([data-band="low"]) { display: none; }
-.cars-page:has(#filterPrice option[value="mid"]:checked) [data-car]:not([data-band="mid"]) { display: none; }
-.cars-page:has(#filterPrice option[value="high"]:checked) [data-car]:not([data-band="high"]) { display: none; }
-.cars-page:has(#filterSeats option[value="4"]:checked) [data-car]:not([data-seats="4"]) { display: none; }
-.cars-page:has(#filterSeats option[value="5"]:checked) [data-car]:not([data-seats="5"]) { display: none; }
-.cars-page:has(#filterFuel option[value="Petrol"]:checked) [data-car]:not([data-fuel="Petrol"]) { display: none; }
-.cars-page:has(#filterFuel option[value="Hybrid"]:checked) [data-car]:not([data-fuel="Hybrid"]) { display: none; }
-.cars-page:has(#filterFuel option[value="Electric"]:checked) [data-car]:not([data-fuel="Electric"]) { display: none; }
-
-
 .cars-results { 
     display: flex;
-    flex-direction: column;
-    counter-reset: visible; }
-
-.cars-results [data-car] { counter-increment: visible; }
+    flex-direction: column; }
 
 .cars-results .results-bar { order: -1; }
-
-.results-count::after { content: counter(visible); }
 
 .results-bar {
   display: flex;
@@ -210,6 +198,7 @@
   font-weight: 500; 
 }
 .results-trip { margin: 0; color: var(--muted); font-size: 11px; }
+.cars-empty { margin: 16px 0; padding: 20px; border-radius: 12px; background: #edf3ed; color: var(--deep-green); }
 .results-note { margin: 22px 0 0; color: var(--muted); font-size: 12px; }
 .results-note a { color: var(--deep-green); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 

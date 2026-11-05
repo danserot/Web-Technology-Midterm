@@ -186,14 +186,9 @@
 
 .cars-results { 
     display: flex;
-    flex-direction: column;
-    counter-reset: visible; }
-
-.cars-results [data-car] { counter-increment: visible; }
+    flex-direction: column; }
 
 .cars-results .results-bar { order: -1; }
-
-.results-count::after { content: counter(visible); }
 
 .results-bar {
   display: flex;
@@ -210,6 +205,7 @@
   font-weight: 500; 
 }
 .results-trip { margin: 0; color: var(--muted); font-size: 11px; }
+.cars-empty { margin: 16px 0; padding: 20px; border-radius: 12px; background: #edf3ed; color: var(--deep-green); }
 .results-note { margin: 22px 0 0; color: var(--muted); font-size: 12px; }
 .results-note a { color: var(--deep-green); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 

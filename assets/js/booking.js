@@ -8,6 +8,10 @@ const summaryPickup = document.getElementById("summaryPickup");
 const summaryReturn = document.getElementById("summaryReturn");
 const summaryDays = document.getElementById("summaryDays");
 const summaryTotal = document.getElementById("summaryTotal");
+const fullNameInput = document.getElementById("fullName");
+const emailInput = document.getElementById("email");
+const phoneInput = document.getElementById("phone");
+const termsInput = document.getElementById("terms");
 
 
 let selectedCar = null;
@@ -55,10 +59,98 @@ function updateSummary() {
   summaryTotal.textContent = `$${total}`;
 }
 
-pickupInput.addEventListener("change", updateSummary);
+function getToday() {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${now.getFullYear()}-${month}-${day}`;
+}
+
+function validateFullName() {
+  if (fullNameInput.value.trim().length < 3) {
+    return "Name must be at least 3 characters";
+  }
+  return "";
+}
+
+function validateEmail() {
+  const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!pattern.test(emailInput.value.trim())) {
+    return "Enter a valid email, e.g. you@example.com";
+  }
+  return "";
+}
+
+function validatePhone() {
+  const pattern = /^\+?[0-9\s()-]+$/;
+  const digits = phoneInput.value.replace(/\D/g, "");
+  if (!pattern.test(phoneInput.value.trim()) || digits.length < 10 || digits.length > 15) {
+    return "Enter a valid phone, e.g. +7 700 000 00 00";
+  }
+  return "";
+}
+
+function validatePickup() {
+  if (!pickupInput.value) return "Choose a pick-up date";
+  if (pickupInput.value < getToday()) return "Pick-up date cannot be in the past";
+  return "";
+}
+
+function validateReturn() {
+  if (!returnInput.value) return "Choose a return date";
+  if (returnInput.value <= pickupInput.value) return "Return date must be after pick-up date";
+  return "";
+}
+
+function validateTerms() {
+  if (!termsInput.checked) return "You must agree to the terms";
+  return "";
+}
+
+const fields = [
+  { input: fullNameInput, validate: validateFullName },
+  { input: emailInput, validate: validateEmail },
+  { input: phoneInput, validate: validatePhone },
+  { input: pickupInput, validate: validatePickup },
+  { input: returnInput, validate: validateReturn },
+  { input: termsInput, validate: validateTerms },
+];
+
+function showError(input, message) {
+  const errorBox = document.getElementById(`${input.id}Error`);
+  errorBox.textContent = message;
+  input.classList.toggle("is-invalid", message !== "");
+}
+
+function validateField(field) {
+  const message = field.validate();
+  showError(field.input, message);
+  return message === "";
+}
+
+function validateForm() {
+  let isValid = true;
+  for (const field of fields) {
+    if (!validateField(field)) {
+      isValid = false;
+    }
+  }
+  return isValid;
+}
+
+for (const field of fields) {
+  field.input.addEventListener("input", function(){ validateField(field); });
+  field.input.addEventListener("change", function(){ validateField(field); });
+}
+
+pickupInput.addEventListener("change", function() {
+  updateSummary();
+  if (returnInput.value) validateField(fields[4]);
+});
 returnInput.addEventListener("change", updateSummary);
 
 
 selectedCar = getSelectedCar();
 showSelectedCar(selectedCar);
+pickupInput.min = getToday();
 updateSummary();

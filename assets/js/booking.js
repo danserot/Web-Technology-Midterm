@@ -174,4 +174,19 @@ returnInput.addEventListener("change", updateSummary);
 selectedCar = getSelectedCar();
 showSelectedCar(selectedCar);
 pickupInput.min = getToday();
+
+const summaryLocation = document.getElementById("summaryLocation");
+
+function loadRentalSearch() {
+  const saved = window.localStorage.getItem("rentalSearch");
+  return saved ? JSON.parse(saved) : null;
+}
+
+function fillTripData(search) {
+  if (!search) return;
+  pickupInput.value = (search.pickup || "").slice(0, 10);
+  returnInput.value = (search.return || "").slice(0, 10);
+  summaryLocation.textContent = search.location || "Astana Downtown";
+}
+fillTripData(loadRentalSearch());
 updateSummary();

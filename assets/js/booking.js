@@ -14,7 +14,11 @@ const phoneInput = document.getElementById("phone");
 const termsInput = document.getElementById("terms");
 const bookingForm = document.getElementById("bookingForm");
 const confirmationBox = document.getElementById("confirmation");
-const confirmationText = document.getElementById("confirmationText");
+const confirmationText = document.getElementById("confirmationText")
+
+const detailsStep = document.getElementById("detailsStep");
+const confirmationLine = document.getElementById("confirmationLine");
+const confirmationStep = document.getElementById("confirmationStep");;
 
 let selectedCar = null;
 
@@ -140,6 +144,19 @@ function validateForm() {
   return isValid;
 }
 
+
+function showConfirmationStep() {
+  detailsStep.classList.remove("active");
+  detailsStep.classList.add("completed");
+  detailsStep.querySelector(".step-number").textContent = "✓";
+
+  confirmationLine.classList.add("completed");
+
+  confirmationStep.classList.add("active");
+
+  confirmationStep.querySelector(".step-number").textContent = "✓";
+}
+
 function showConfirmation() {
   const days = getDays(pickupInput.value, returnInput.value);
   const total = calculateTotalPrice(selectedCar.price, days);
@@ -150,6 +167,7 @@ function showConfirmation() {
 
   bookingForm.hidden = true;
   confirmationBox.classList.add("show");
+  showConfirmationStep();
 }
 
 bookingForm.addEventListener("submit", function(event){

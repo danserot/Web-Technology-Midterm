@@ -12,7 +12,9 @@ const fullNameInput = document.getElementById("fullName");
 const emailInput = document.getElementById("email");
 const phoneInput = document.getElementById("phone");
 const termsInput = document.getElementById("terms");
-
+const bookingForm = document.getElementById("bookingForm");
+const confirmationBox = document.getElementById("confirmation");
+const confirmationText = document.getElementById("confirmationText");
 
 let selectedCar = null;
 
@@ -137,6 +139,25 @@ function validateForm() {
   }
   return isValid;
 }
+
+function showConfirmation() {
+  const days = getDays(pickupInput.value, returnInput.value);
+  const total = calculateTotalPrice(selectedCar.price, days);
+
+  confirmationText.textContent =
+    `${selectedCar.name} · ${formatDate(pickupInput.value)} – ${formatDate(returnInput.value)}` +
+    ` · ${days} days · $${total}`;
+
+  bookingForm.hidden = true;
+  confirmationBox.classList.add("show");
+}
+
+bookingForm.addEventListener("submit", function(event){
+  event.preventDefault();
+  if (validateForm()) {
+    showConfirmation();
+  }
+});
 
 for (const field of fields) {
   field.input.addEventListener("input", function(){ validateField(field); });

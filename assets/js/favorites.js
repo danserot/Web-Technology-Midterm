@@ -57,5 +57,45 @@
     }
   }
 
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest(".favorite-button");
+    if (!button) return;
 
+    const car = getCarById(button.closest(".car-card")?.dataset.carId);
+    if (!car) return;
+
+    const wasFavorite = favoriteIds.delete(car.id);
+    if (!wasFavorite) favoriteIds.add(car.id);
+
+    try {
+      localStorage.setItem(storageKey, JSON.stringify([...favoriteIds]));
+    } catch {
+    
+    }
+
+    const removedFromGrid = grid.contains(button);
+    renderFavorites();
+
+    if (removedFromGrid) {
+      const nextHeart = document.querySelector(
+        `[data-car-id="${car.id}"] .favorite-button`
+      ) || grid.querySelector(".favorite-button") || emptyMessage;
+      nextHeart.focus();
+    }
+
+    if (!wasFavorite) {
+      button.dispatchEvent(
+        new CustomEvent("rentocar:favorite-added", { bubbles: true })
+      );
+    }
+  });
+
+  window.addEventListener("storage", (event) => {
+    if (event.key === storageKey || event.key === null) {
+      favoriteIds = readFavorites();
+      renderFavorites();
+    }
+  });
+
+  renderFavorites();
 })();

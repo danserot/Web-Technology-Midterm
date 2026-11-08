@@ -66,7 +66,7 @@
         </nav>
       </div>
     </header>
-    
+
     <main>
   <section class="catalog-hero container">
     <div class="catalog-hero-copy">
@@ -140,7 +140,7 @@
     </div>
 
     <div class="editor-grid">
-    
+
 
       <article class="editor-card">
 
@@ -259,26 +259,38 @@
   </section>
 
 
-  <section class="car-comparison container">
-
+  
+  <section class="car-comparison container" aria-labelledby="comparison-title">
     <div class="comparison-heading">
-      <div>
-        <span class="catalog-eyebrow">Quick comparison</span>
-        <h2>Compare your favorites</h2>
-        <p>
-          Key details side by side to help you choose the right car.
-        </p>
-      </div>
+      <span class="catalog-eyebrow">Quick comparison</span>
+      <h2 id="comparison-title">Compare cars</h2>
+      <p>Choose up to three cars to compare their rental details.</p>
     </div>
 
-    <div class="table-responsive comparison-table-wrapper">
+    
+    <form id="comparison-form" class="mb-3">
+      <label for="comparison-car" class="form-label">Choose a car to compare</label>
+      <div class="row g-2">
+        <div class="col-sm-6 col-lg-4">
+          <select id="comparison-car" class="form-select" required>
+            <option value="">Select a car</option>
+          </select>
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-outline-success" disabled>
+            Add to comparison
+          </button>
+        </div>
+      </div>
+    </form>
 
+    <p id="comparison-status" role="status">No cars selected yet.</p>
+
+    
+    <div id="comparison-results" class="table-responsive comparison-table-wrapper"
+      role="region" aria-labelledby="comparison-title" tabindex="0" hidden>
       <table class="comparison-table">
-
-        <caption>
-          Comparison of selected RentoCar vehicles
-        </caption>
-
+        <caption>Comparison of selected RentoCar vehicles</caption>
         <thead>
           <tr>
             <th scope="col">Model</th>
@@ -286,53 +298,13 @@
             <th scope="col">Seats</th>
             <th scope="col">Transmission</th>
             <th scope="col">Price / day</th>
+            <th scope="col">Remove</th>
           </tr>
         </thead>
-
-        <tbody>
-
-          <tr>
-            <th scope="row">Porsche Macan</th>
-            <td>
-              <span class="table-category">Performance</span>
-            </td>
-            <td>5</td>
-            <td>Automatic</td>
-            <td>
-              <strong>$164</strong>
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">Polestar 2</th>
-            <td>
-              <span class="table-category">Electric</span>
-            </td>
-            <td>5</td>
-            <td>Automatic</td>
-            <td>
-              <strong>$109</strong>
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">Range Rover Evoque</th>
-            <td>
-              <span class="table-category">Luxury</span>
-            </td>
-            <td>5</td>
-            <td>Automatic</td>
-            <td>
-              <strong>$148</strong>
-            </td>
-          </tr>
-
-        </tbody>
-
+       
+        <tbody id="comparison-rows"></tbody>
       </table>
-
     </div>
-
   </section>
 
 </main>
@@ -357,6 +329,7 @@
     <script
   src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
 </script>
+
 <script src="assets/js/carsData.js"></script>
 <script src="assets/js/jqueryUi.js"></script>
 </body>

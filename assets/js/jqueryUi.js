@@ -94,3 +94,39 @@
     select.focus();
   });
 })();
+
+if (window.jQuery) {
+  (($) => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const $notice = $("#favorite-notice");
+    const $announcement = $("#favorite-announcement");
+
+    
+    $(".faq-question").on("click", function () {
+      const $question = $(this);
+      const expanded = $question.attr("aria-expanded") === "true";
+
+      $question.attr("aria-expanded", String(!expanded));
+      $question.next(".faq-answer")
+        .stop(true, true)
+        .slideToggle(reduceMotion.matches ? 0 : 180);
+    });
+
+    
+    $(document).on("rentocar:favorite-added", ".favorite-button", function () {
+      const carId = $(this).closest(".car-card").attr("data-car-id");
+      const car = window.RentoCar.getCarById(carId);
+      if (!car) return;
+
+      const message = `${car.name} added to favorites`;
+      const duration = reduceMotion.matches ? 0 : 150;
+
+      $announcement.text(message);
+      $notice.stop(true, true)
+        .text(message)
+        .fadeIn(duration)
+        .delay(1800)
+        .fadeOut(duration);
+    });
+  })(window.jQuery);
+}

@@ -15,9 +15,47 @@
         return new Set(saved.map((id) => getCarById(id)?.id).filter(Boolean));
       }
     } catch {
-   
+    
     }
     return new Set();
   }
 
-})
+  let favoriteIds = readFavorites();
+
+  function updateHeart(button, car) {
+    const isFavorite = favoriteIds.has(car.id);
+    button.setAttribute("aria-label", `${car.name} favorite`);
+    button.setAttribute("aria-pressed", String(isFavorite));
+    button.textContent = isFavorite ? "♥" : "♡";
+  }
+
+  function renderFavorites() {
+    const cards = document.createDocumentFragment();
+
+    for (const id of favoriteIds) {
+      const car = getCarById(id);
+      const card = template.content.firstElementChild.cloneNode(true);
+      card.dataset.carId = car.id;
+
+      const image = card.querySelector("img");
+      image.src = car.image;
+      image.alt = car.name;
+      card.querySelector("h3").textContent = car.name;
+      card.querySelector(".car-details p").textContent = car.description;
+      card.querySelector(".favorite-price").textContent = `$${car.price}`;
+      card.querySelector(".car-meta span").textContent = car.transmission;
+      updateHeart(card.querySelector(".favorite-button"), car);
+      cards.append(card);
+    }
+
+    grid.replaceChildren(cards);
+    emptyMessage.hidden = favoriteIds.size > 0;
+
+    for (const button of popularHearts) {
+      const car = getCarById(button.closest(".car-card").dataset.carId);
+      if (car) updateHeart(button, car);
+    }
+  }
+
+
+})();

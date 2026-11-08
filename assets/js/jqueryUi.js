@@ -46,5 +46,51 @@
     }
 
    
-}
+    for (const option of select.options) {
+      option.disabled = comparisonIds.has(Number(option.value));
+    }
+
+    select.value = "";
+    select.disabled = comparisonIds.size === limit;
+    addButton.disabled = true;
+    results.hidden = comparisonIds.size === 0;
+
+    if (comparisonIds.size === limit) {
+      status.textContent = "3 of 3 cars selected. Remove a car to add another.";
+    } else if (comparisonIds.size > 0) {
+      status.textContent = `${comparisonIds.size} of 3 cars selected.`;
+    } else {
+      status.textContent = "No cars selected yet.";
+    }
+  }
+
+  select.addEventListener("change", () => {
+    addButton.disabled = !select.value;
+  });
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const car = getCarById(select.value);
+    if (!car || comparisonIds.has(car.id) || comparisonIds.size >= limit) return;
+
+    comparisonIds.add(car.id);
+    renderComparison();
+
+    if (select.disabled) {
+      results.focus();
+    } else {
+      select.focus();
+    }
+  });
+
+
+  rows.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-remove-car-id]");
+    if (!button) return;
+
+    comparisonIds.delete(Number(button.dataset.removeCarId));
+    renderComparison();
+    select.focus();
+  });
 })();

@@ -308,3 +308,7 @@
     height: 170px;
   }
 }
+
+.favorite-button[aria-pressed="true"] {
+  color: #fb2a62;
+}

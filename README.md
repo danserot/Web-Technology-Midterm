@@ -6,35 +6,24 @@ The project provides a simple interface for browsing rental cars, exploring car 
 
 ## Features
 
-- Responsive navigation and page layout
-- Home page with featured rental cars
-- Cars page with available vehicles
-- Car categories page
-- Catalog with four collections:
-  - City breaks
-  - Weekend away
-  - Go electric
-  - Premium drive
-- Editor's Picks with selected cars
-- Car comparison table with model, category, seats, transmission, and daily price
-- Booking form with:
-  - Full name
-  - Email address
-  - Phone number
-  - Pick-up and return dates
-  - Required agreement checkbox
-- Built-in HTML form validation
-- Trip summary with a demonstration car, rental dates, location, and total price
-- Demonstration booking confirmation
-- Responsive design for desktop, tablet, and mobile devices
+- **Home** — Featured cars, a trip search form, and a Your Favorites section. Favorites are saved in the browser and restored after a reload.
+- **Cars** — Search by car name and combine filters for category, price, seats, and fuel type.
+- **Catalog** — Browse curated collections and compare up to three cars by category, seats, transmission, and daily price.
+- **Categories** — Open the Cars page with a category filter already selected.
+- **Booking** — Review the selected car, enter trip and contact details, and see the rental total update as the dates change.
+- **FAQ and notifications** — Expand answers on the Home page and see a short notification when a car is added to favorites.
+
+  
 
 ## Technologies
 
 - HTML5
 - CSS3
 - Bootstrap 5
+- JavaScript and DOM events
+- localStorage
+- jQuery 3.7.1 for FAQ and notification animations
 
-The booking page is a front-end demonstration only. It does not create a real reservation, process payments, or send user data to a server.
 
 ## Team
 

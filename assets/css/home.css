@@ -308,3 +308,16 @@
     height: 170px;
   }
 }
+
+.favorite-button[aria-pressed="true"] {
+  color: #fb2a62;
+}
+
+.faq-answer,
+#favorite-notice {
+  display: none;
+}
+
+#favorite-notice {
+  z-index: 10;
+}

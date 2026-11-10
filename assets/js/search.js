@@ -1,10 +1,9 @@
 const searchForm = document.querySelector(".search-form");
+const searchStorage = window.RentoCar.storage;
 
 function loadSavedSearch() {
-  const saved = window.localStorage.getItem("rentalSearch");
-  if (!saved) return;
-
-  const search = JSON.parse(saved);
+  const search = searchStorage.read("rentalSearch", null, searchStorage.validators.rentalSearch);
+  if (!search) return;
   searchForm.elements["location"].value = search.location;
   searchForm.elements["pickup"].value = search.pickup;
   searchForm.elements["return"].value = search.return;
@@ -23,7 +22,7 @@ searchForm.addEventListener("submit", function(event){
     return;
   }
 
-  window.localStorage.setItem("rentalSearch", JSON.stringify(rentalSearch));
+  searchStorage.write("rentalSearch", rentalSearch, searchStorage.validators.rentalSearch);
 });
 
 loadSavedSearch();

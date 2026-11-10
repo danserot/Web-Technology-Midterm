@@ -162,7 +162,17 @@ Use focused commits, for example feat(oop): introduce Car model and catalog inst
 
 ## Publication
 
-GitHub Pages target: <https://danserot.github.io/Web-Technology-Midterm/>.
+Published site: <https://danserot.github.io/Web-Technology-Midterm/>.
+
+Verified on 10 November 2026 against application commit 43134b0:
+
+- 30 service checks passed, including request deduplication from loading-event listeners.
+- Browser scenarios passed on six local pages with no JavaScript exceptions or broken local resources.
+- GitHub Pages deployment completed successfully. All six published pages and 39 local resources returned HTTP 200.
+- Real Frankfurter requests succeeded on all four currency pages. The supplied rate date was 2026-11-09.
+- The published Porsche booking for three days changed from USD 492.00 to EUR 439.56 at the returned rate of 0.89342. Filtering, selected-car navigation and mobile layout passed.
+
+These results describe this release; future network availability and exchange rates can change.
 
 Publish from the root of artem-api-core. .nojekyll preserves the static files; no bundling is required. Keep secrets and personal data out of this public repository. After deployment, check Home, Cars, Catalog, Categories and Booking under the repository subpath, local styles/scripts/images, mobile navigation and a real currency request. Local tests alone do not establish that the published version is current.
 

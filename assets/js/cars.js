@@ -38,7 +38,7 @@ function createCarCard(car) {
             <h3>${car.name}</h3>
             <p>${car.description}</p>
           </div>
-          <strong>$${car.price} <small>/ day</small></strong>
+          <strong><span data-price-usd="${car.price}">${window.RentoCar.currency.format(car.price)}</span> <small>/ day</small></strong>
         </div>
         <ul class="rental-meta">
           <li>${car.seats} seats</li>
@@ -66,19 +66,7 @@ function renderCars(carsToRender) {
 }
 
 function filterCars() {
-  return window.RentoCar.cars.filter((car) => {
-    const categoryMatches = filters.category === "all" || car.category === filters.category;
-    const priceMatches =
-      filters.price === "all" ||
-      (filters.price === "low" && car.price < 100) ||
-      (filters.price === "mid" && car.price >= 100 && car.price <= 150) ||
-      (filters.price === "high" && car.price > 150);
-    const seatsMatch = filters.seats === "all" || car.seats === Number(filters.seats);
-    const fuelMatches = filters.fuel === "all" || car.fuel === filters.fuel;
-    const nameMatches = car.name.toLowerCase().includes(filters.query);
-
-    return categoryMatches && priceMatches && seatsMatch && fuelMatches && nameMatches;
-  });
+  return window.RentoCar.cars.filter((car) => car.matchesFilters(filters));
 }
 
 function applyFilters() {
@@ -138,7 +126,7 @@ carsForm.addEventListener("reset", (event) => {
 carGrid.addEventListener("click", (event) => {
   const selectLink = event.target.closest(".rental-select");
   if (selectLink) {
-    window.localStorage.setItem("selectedCarId", selectLink.dataset.carId);
+    window.RentoCar.storage.write("selectedCarId", Number(selectLink.dataset.carId), window.RentoCar.storage.validators.carId);
   }
 });
 

@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
@@ -17,6 +18,7 @@
       rel="stylesheet" />
     <link rel="stylesheet" href="assets/css/base.css" />
     <link rel="stylesheet" href="assets/css/booking.css" />
+    <link rel="stylesheet" href="assets/css/currency.css" />
   </head>
   <body>
     <header class="site-header">
@@ -68,6 +70,19 @@
     </header>
 
     <main>
+      <section class="currency-panel container" data-currency-panel aria-label="Price currency">
+        <div class="currency-control">
+          <label for="priceCurrency">Show prices in</label>
+          <select id="priceCurrency" data-currency-select aria-describedby="currencyStatus">
+            <option value="USD">USD / US Dollar</option>
+            <option value="EUR" disabled>EUR / Euro</option>
+            <option value="GBP" disabled>GBP / British Pound</option>
+          </select>
+        </div>
+        <p class="currency-status" id="currencyStatus" data-currency-status role="status" aria-live="polite" aria-atomic="true">Original prices are shown in USD.</p>
+        <button class="currency-retry" type="button" data-currency-retry hidden>Try again</button>
+      </section>
+
       <section class="booking-page container">
         <div class="booking-progress" aria-label="Booking progress">
           <div class="progress-step completed">
@@ -267,7 +282,11 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="assets/js/services/storageService.js"></script>
+    <script src="assets/js/models/Car.js"></script>
     <script src="assets/js/carsData.js"></script>
+    <script src="assets/js/services/currencyService.js"></script>
     <script src="assets/js/booking.js"></script>
+    <script src="assets/js/currencyUi.js"></script>
   </body>
 </html>

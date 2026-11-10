@@ -323,3 +323,25 @@ test("a synchronous fetch failure does not leave retries stuck on the failed req
   assert.equal(calls, 2);
   assert.equal(currency.getState().status, "success");
 });
+
+test("loading listeners share the original request when they call loadRates again", async () => {
+  let calls = 0;
+  let nestedRequest;
+  let requestedInsideListener = false;
+  const { currency, window } = loadCurrency({ fetch: async () => {
+    calls += 1;
+    return { ok: true, json: async () => validRates() };
+  } });
+  window.addEventListener("rentocar:currency-change", () => {
+    if (currency.getState().status === "loading" && !requestedInsideListener) {
+      requestedInsideListener = true;
+      nestedRequest = currency.loadRates();
+    }
+  });
+  const originalRequest = currency.loadRates();
+  await Promise.all([originalRequest, nestedRequest]);
+  assert.equal(requestedInsideListener, true);
+  assert.equal(originalRequest, nestedRequest);
+  assert.equal(calls, 1);
+  assert.equal(currency.getState().status, "success");
+});

@@ -132,7 +132,7 @@ Run dependency-free service tests with Node.js:
 node tests/services.test.cjs
 ```
 
-The 29 checks cover model instances, combined filters and boundaries, rental totals, legacy/corrupt/blocked storage, failed writes/removal, shared requests, conversion, preference persistence, HTTP/JSON/structure errors, empty data, timeout, retry and synchronous fetch failures.
+The 30 checks cover model instances, combined filters and boundaries, rental totals, legacy/corrupt/blocked storage, failed writes/removal, shared requests, conversion, preference persistence, HTTP/JSON/structure errors, empty data, timeout, retry, synchronous fetch failures and reentrant calls from loading-event listeners.
 
 For browser verification, start the HTTP server, then run:
 

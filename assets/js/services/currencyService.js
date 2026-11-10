@@ -46,7 +46,6 @@
   function loadRates({ force = false } = {}) {
     if (pendingRequest) return pendingRequest;
     if (!force && state.status === "success") return Promise.resolve(state);
-    publish({ status: "loading", currency: "USD", rates: Object.freeze({ USD: 1 }), date: null, error: null });
     const controller = new AbortController();
     let timedOut = false;
     const timeout = window.setTimeout(() => {
@@ -76,6 +75,7 @@
         pendingRequest = null;
       }
     });
+    publish({ status: "loading", currency: "USD", rates: Object.freeze({ USD: 1 }), date: null, error: null });
     return pendingRequest;
   }
 

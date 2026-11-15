@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
@@ -17,6 +18,7 @@
       rel="stylesheet" />
     <link rel="stylesheet" href="assets/css/base.css" />
     <link rel="stylesheet" href="assets/css/home.css" />
+    <link rel="stylesheet" href="assets/css/currency.css" />
   </head>
   <body>
     <header class="site-header">
@@ -68,6 +70,19 @@
     </header>
 
     <main>
+      <section class="currency-panel container" data-currency-panel aria-label="Price currency">
+        <div class="currency-control">
+          <label for="priceCurrency">Show prices in</label>
+          <select id="priceCurrency" data-currency-select aria-describedby="currencyStatus">
+            <option value="USD">USD / US Dollar</option>
+            <option value="EUR" disabled>EUR / Euro</option>
+            <option value="GBP" disabled>GBP / British Pound</option>
+          </select>
+        </div>
+        <p class="currency-status" id="currencyStatus" data-currency-status role="status" aria-live="polite" aria-atomic="true">Original prices are shown in USD.</p>
+        <button class="currency-retry" type="button" data-currency-retry hidden>Try again</button>
+      </section>
+
       <section class="hero container" aria-labelledby="hero-title">
         <div class="hero-copy">
           <p class="eyebrow">The easy way to get moving</p>
@@ -149,7 +164,7 @@
                 <h3>Volvo XC60</h3>
                 <p>Premium SUV</p>
               </div>
-              <strong>$98<small>/day</small></strong>
+              <strong><span data-price-usd="98">$98</span><small>/day</small></strong>
             </div>
             <div class="car-meta">
               <span>4.9 rating</span><span>Automatic</span>
@@ -174,7 +189,7 @@
                 <h3>BMW i4</h3>
                 <p>Electric sedan</p>
               </div>
-              <strong>$112<small>/day</small></strong>
+              <strong><span data-price-usd="112">$112</span><small>/day</small></strong>
             </div>
             <div class="car-meta">
               <span>4.8 rating</span><span>Automatic</span>
@@ -199,7 +214,7 @@
                 <h3>Mini Cooper</h3>
                 <p>City compact</p>
               </div>
-              <strong>$64<small>/day</small></strong>
+              <strong><span data-price-usd="64">$64</span><small>/day</small></strong>
             </div>
             <div class="car-meta">
               <span>4.6 rating</span><span>Automatic</span>
@@ -310,15 +325,19 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/search.js"></script>
-    <script src="assets/js/carsData.js"></script>
-    <script src="assets/js/favorites.js"></script>
 
     
     <script
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"></script>
+      <script src="assets/js/services/storageService.js"></script>
+    <script src="assets/js/models/Car.js"></script>
+    <script src="assets/js/carsData.js"></script>
+    <script src="assets/js/services/currencyService.js"></script>
+    <script src="assets/js/search.js"></script>
+    <script src="assets/js/favorites.js"></script>
     <script src="assets/js/jqueryUi.js"></script>
+    <script src="assets/js/currencyUi.js"></script>
   </body>
 </html>

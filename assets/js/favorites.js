@@ -1,5 +1,5 @@
 (() => {
-  const { getCarById } = window.RentoCar;
+  const { getCarById, storage, currency } = window.RentoCar;
   const storageKey = "favoriteCarIds";
   const grid = document.querySelector("#favorites-grid");
   const emptyMessage = document.querySelector("#favorites-empty");
@@ -9,15 +9,8 @@
   );
 
   function readFavorites() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(storageKey));
-      if (Array.isArray(saved)) {
-        return new Set(saved.map((id) => getCarById(id)?.id).filter(Boolean));
-      }
-    } catch {
-    
-    }
-    return new Set();
+    const saved = storage.read(storageKey, [], storage.validators.favoriteIds);
+    return new Set(saved.map((id) => getCarById(id)?.id).filter(Boolean));
   }
 
   let favoriteIds = readFavorites();
@@ -42,7 +35,9 @@
       image.alt = car.name;
       card.querySelector("h3").textContent = car.name;
       card.querySelector(".car-details p").textContent = car.description;
-      card.querySelector(".favorite-price").textContent = `$${car.price}`;
+      const price = card.querySelector(".favorite-price");
+      price.dataset.priceUsd = String(car.price);
+      price.textContent = currency.format(car.price);
       card.querySelector(".car-meta span").textContent = car.transmission;
       updateHeart(card.querySelector(".favorite-button"), car);
       cards.append(card);
@@ -67,11 +62,7 @@
     const wasFavorite = favoriteIds.delete(car.id);
     if (!wasFavorite) favoriteIds.add(car.id);
 
-    try {
-      localStorage.setItem(storageKey, JSON.stringify([...favoriteIds]));
-    } catch {
-    
-    }
+    storage.write(storageKey, [...favoriteIds], storage.validators.favoriteIds);
 
     const removedFromGrid = grid.contains(button);
     renderFavorites();

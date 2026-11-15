@@ -32,9 +32,12 @@
         ? "SUV"
         : car.category[0].toUpperCase() + car.category.slice(1);
 
-      for (const value of [category, car.seats, car.transmission, `$${car.price}`]) {
+      for (const value of [category, car.seats, car.transmission]) {
         row.insertCell().textContent = value;
       }
+      const price = row.insertCell();
+      price.dataset.priceUsd = String(car.price);
+      price.textContent = window.RentoCar.currency.format(car.price);
 
       const remove = document.createElement("button");
       remove.type = "button";

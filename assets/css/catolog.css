@@ -91,7 +91,7 @@
 
 .collection-card p {
   margin: 0;
-  color: #6f7973;
+  color: var(--text-soft, #6f7973);
   font-size: 10px;
 }
 
@@ -182,7 +182,7 @@
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 15px;
-  background: var(--white);
+  background: var(--surface, var(--white));
   box-shadow: var(--shadow);
   transition:
     transform 160ms ease,
@@ -212,7 +212,7 @@
   padding: 5px 8px;
   border-radius: 999px;
   color: var(--deep-green);
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--surface-glass, rgba(255, 255, 255, 0.92));
   font-size: 8px;
   font-weight: 600;
 }
@@ -325,7 +325,7 @@
   overflow: auto;
   border: 1px solid var(--line);
   border-radius: 15px;
-  background: var(--white);
+  background: var(--surface, var(--white));
   box-shadow: var(--shadow);
 }
 
@@ -352,8 +352,8 @@
 }
 
 .comparison-table thead th {
-  color: #7f8b84;
-  background: #f5f7f5;
+  color: var(--text-soft, #7f8b84);
+  background: var(--tint, #f5f7f5);
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -368,7 +368,7 @@
 }
 
 .comparison-table tbody td {
-  color: #6f7b74;
+  color: var(--text-soft, #6f7b74);
   font-size: 10px;
 }
 
@@ -382,7 +382,7 @@
 }
 
 .comparison-table tbody tr:hover {
-  background: #fafcf9;
+  background: var(--tint, #fafcf9);
 }
 
 .comparison-table strong {
@@ -395,7 +395,7 @@
   padding: 4px 8px;
   border-radius: 999px;
   color: var(--deep-green);
-  background: #edf3ed;
+  background: var(--tint, #edf3ed);
   font-size: 8px;
   font-weight: 600;
 }

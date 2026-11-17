@@ -1,5 +1,6 @@
 (() => {
-  const { storage, currency, getCarById, cars } = window.RentoCar;
+  
+  const { storage, currency, getCarById, cars, bookings } = window.RentoCar;
   const byId = (id) => document.getElementById(id);
   const form = byId("bookingForm");
   if (!form) return;
@@ -20,9 +21,7 @@
   const insurance = byId("insurance");
   const childSeat = byId("childSeat");
 
-  
-  const insurancePerDay = 15;
-  const childSeatPerTrip = 10;
+  const { insurancePerDay, childSeatPerTrip } = bookings.rates;
   const requestedId = new URLSearchParams(window.location.search).get("carId");
   const requestedCar = requestedId === null ? null : getCarById(requestedId);
   const storedCarId = storage.read("selectedCarId", 1, storage.validators.carId);
@@ -38,9 +37,11 @@
   }
 
   function rentalDays() {
-    if (!pickup.value || !dropoff.value) return 0;
-    const days = (Date.parse(dropoff.value) - Date.parse(pickup.value)) / 86400000;
-    return Number.isSafeInteger(days) && days > 0 ? days : 0;
+    return bookings.rentalDays(pickup.value, dropoff.value);
+  }
+
+  function selectedExtras() {
+    return { insurance: insurance.checked, childSeat: childSeat.checked };
   }
 
   function formatDate(value) {
@@ -50,11 +51,9 @@
   }
 
   function updateSummary() {
+  
     const days = rentalDays();
-    const extrasUSD = days === 0 ? 0 :
-      (insurance.checked ? insurancePerDay * days : 0) +
-      (childSeat.checked ? childSeatPerTrip : 0);
-    const totalUSD = selectedCar.calculateRentalCost(days) + extrasUSD;
+    const { extrasUSD, totalUSD } = bookings.quote(selectedCar, days, selectedExtras());
 
     byId("insurancePrice").textContent = currency.format(insurancePerDay);
     byId("childSeatPrice").textContent = currency.format(childSeatPerTrip);
@@ -82,7 +81,6 @@
     }
   }
 
-  
   const stepFields = [
     [
       { input: pickup, validate: () => {
@@ -136,7 +134,6 @@
     });
   }
 
- 
   function showStep(step, moveFocus = true) {
     currentStep = step;
     panels.forEach((panel, index) => { panel.hidden = index !== step; });
@@ -163,12 +160,34 @@
       return;
     }
 
+    const saveError = byId("bookingSaveError");
+    saveError.textContent = "";
+
+    const saved = bookings.create({
+      carId: selectedCar.id,
+      pickup: pickup.value,
+      dropoff: dropoff.value,
+      location: byId("summaryLocation").textContent.trim(),
+      contact: {
+        name: fullName.value.trim(),
+        email: email.value.trim(),
+        phone: phone.value.trim(),
+      },
+      extras: selectedExtras(),
+    });
+
+    if (!saved) {
+      saveError.textContent = "We couldn't save your booking in this browser. Please try again.";
+      return;
+    }
+
     confirmed = true;
     form.hidden = true;
     confirmation.classList.add("show");
     updateProgress();
     updateSummary();
     byId("bookingConfirmedHeading").focus();
+    window.dispatchEvent(new Event("rentocar:bookings-change"));
   });
 
   backButton.addEventListener("click", () => showStep(currentStep - 1));

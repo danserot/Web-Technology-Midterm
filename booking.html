@@ -45,6 +45,7 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="booking.html">Booking</a>
               </li>
+              
             </ul>
             <a class="sign-in" href="booking.html">Sign in</a>
             <a class="button button-primary nav-cta" href="booking.html">
@@ -170,6 +171,8 @@
                   </label>
                   <small class="field-error" id="termsError"></small>
                 </div>
+                
+                <p id="bookingSaveError" class="text-danger mt-2" role="alert"></p>
               </section>
 
               <div class="d-flex flex-wrap align-items-center gap-2">
@@ -200,7 +203,7 @@
                   <div class="summary-row"><p>Pick-up</p><p id="summaryPickup">—</p></div>
                   <div class="summary-row"><p>Return</p><p id="summaryReturn">—</p></div>
                   <div class="summary-row"><p>Location</p><p id="summaryLocation">Astana Downtown</p></div>
-                  <!-- ИЗМЕНЕНИЕ 3. Показываем стоимость услуг отдельно от аренды. -->
+                  
                   <div class="summary-row"><p>Extras</p><p id="summaryExtras">—</p></div>
                 </div>
                 <div class="summary-price">
@@ -220,9 +223,32 @@
           <p class="booking-eyebrow">Confirmation</p>
           <h2 id="bookingConfirmedHeading" tabindex="-1">Booking confirmed.</h2>
           <p id="confirmationText"></p>
+          <a class="button button-primary mt-3" href="#myBookings">View my bookings</a>
         </div>
       </section>
+
+      
+      <section id="myBookings" class="container py-4" tabindex="-1" aria-labelledby="myBookingsTitle">
+        <h2 id="myBookingsTitle">My Bookings</h2>
+        <p>View the demo bookings saved in this browser.</p>
+        <p id="myBookingsStatus" role="status"></p>
+        <div id="myBookingsList" class="row g-3"></div>
+      </section>
     </main>
+
+    <template id="bookingCardTemplate">
+      <div class="col-12 col-md-6">
+        <article class="booking-card card h-100">
+          <div class="card-body text-break">
+            <h3 class="h5" data-booking-car></h3>
+            <p class="mb-2" data-booking-trip></p>
+            <p class="mb-2" data-booking-extras></p>
+            <p class="mb-2" data-booking-contact></p>
+            <p class="mb-0">Total <strong data-booking-total></strong></p>
+          </div>
+        </article>
+      </div>
+    </template>
 
     <footer class="site-footer">
       <div class="container footer-content">
@@ -244,7 +270,9 @@
     <script src="assets/js/models/Car.js"></script>
     <script src="assets/js/carsData.js"></script>
     <script src="assets/js/services/currencyService.js"></script>
+    <script src="assets/js/services/bookingService.js"></script>
     <script src="assets/js/booking.js"></script>
+    <script src="assets/js/myBookings.js"></script>
     <script src="assets/js/currencyUi.js"></script>
   </body>
 </html>

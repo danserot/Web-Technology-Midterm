@@ -60,5 +60,37 @@
     return storage.write(storageKey, [...bookings, { ...draft, id, totalUSD }], isBookingList);
   }
 
-  app.bookings = Object.freeze({ rates, rentalDays, quote, list, create });
+  function today() {
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${now.getFullYear()}-${month}-${day}`;
+  }
+
+  function update(id, { pickup, dropoff, extras }) {
+    const bookings = list();
+    if (bookings === null) return false;
+    const index = bookings.findIndex((booking) => booking.id === id);
+    if (index === -1) return false;
+
+    const updated = { ...bookings[index], pickup, dropoff, extras };
+    if (!isDraft(updated) || pickup < today()) return false;
+    const car = getCarById(updated.carId);
+    if (!car) return false;
+
+    const days = rentalDays(pickup, dropoff);
+    const { totalUSD } = quote(car, days, extras);
+    bookings[index] = { ...updated, totalUSD };
+    return storage.write(storageKey, bookings, isBookingList);
+  }
+
+  function remove(id) {
+    const bookings = list();
+    if (bookings === null) return false;
+    const remaining = bookings.filter((booking) => booking.id !== id);
+    if (remaining.length === bookings.length) return false;
+    return storage.write(storageKey, remaining, isBookingList);
+  }
+
+  app.bookings = Object.freeze({ rates, today, rentalDays, quote, list, create, update, remove });
 })();

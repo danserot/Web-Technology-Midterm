@@ -231,7 +231,43 @@
       <section id="myBookings" class="container py-4" tabindex="-1" aria-labelledby="myBookingsTitle">
         <h2 id="myBookingsTitle">My Bookings</h2>
         <p>View the demo bookings saved in this browser.</p>
-        <p id="myBookingsStatus" role="status"></p>
+        <p id="myBookingsStatus" role="status" tabindex="-1"></p>
+        <form id="editBookingForm" class="card mb-3" aria-labelledby="editBookingTitle" hidden>
+          <div class="card-body">
+            <h3 id="editBookingTitle" class="h5">Edit booking</h3>
+            <div class="row g-3 mb-3">
+              <div class="col-12 col-sm-6">
+                <label class="form-label" for="editPickup">Pick-up date</label>
+                <input class="form-control" type="date" id="editPickup" required />
+              </div>
+              <div class="col-12 col-sm-6">
+                <label class="form-label" for="editDropoff">Return date</label>
+                <input class="form-control" type="date" id="editDropoff" required />
+              </div>
+            </div>
+            <fieldset class="mb-3">
+              <legend class="h6">Optional extras</legend>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="editInsurance" />
+                <label class="form-check-label" for="editInsurance">
+                  Insurance — <span id="editInsurancePrice"></span> per day
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="editChildSeat" />
+                <label class="form-check-label" for="editChildSeat">
+                  Child seat — <span id="editChildSeatPrice"></span> per trip
+                </label>
+              </div>
+            </fieldset>
+            <p>Updated total <strong id="editBookingTotal">—</strong></p>
+            <p id="editBookingError" class="text-danger" role="alert"></p>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-success" type="submit">Save changes</button>
+              <button class="btn btn-outline-secondary" type="button" id="cancelBookingEdit">Cancel</button>
+            </div>
+          </div>
+        </form>
         <div id="myBookingsList" class="row g-3"></div>
       </section>
     </main>
@@ -245,6 +281,10 @@
             <p class="mb-2" data-booking-extras></p>
             <p class="mb-2" data-booking-contact></p>
             <p class="mb-0">Total <strong data-booking-total></strong></p>
+            <div class="d-flex flex-wrap gap-2 mt-3">
+              <button class="btn btn-outline-success btn-sm" type="button" data-booking-edit>Edit</button>
+              <button class="btn btn-outline-danger btn-sm" type="button" data-booking-delete>Delete</button>
+            </div>
           </div>
         </article>
       </div>

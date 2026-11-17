@@ -97,6 +97,9 @@
     reset.className = "a11y-reset";
     reset.textContent = "Reset settings";
 
+    const hint = document.createElement("p");
+    hint.className = "a11y-hint";
+    hint.textContent = "Press Esc to close this panel.";
 
     const form = document.createElement("form");
     form.addEventListener("submit", (event) => event.preventDefault());
@@ -135,6 +138,13 @@
     }
 
     toggle.addEventListener("click", () => setOpen(panel.hidden));
+    panel.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
     window.addEventListener("storage", (event) => {
       if (event.key === preferences.key || event.key === null) {
         preferences.values = preferences.load();
@@ -143,11 +153,29 @@
       }
     });
 
-    panel.append(heading, form, reset, status);
+    panel.append(heading, form, reset, status, hint);
     document.body.append(toggle, panel);
   }
 
+  function addSkipLink() {
+    const main = document.querySelector("main");
+    if (!main) return;
+    main.id = main.id || "main-content";
+    main.tabIndex = -1;
+    const link = document.createElement("a");
+    link.className = "skip-link";
+    link.href = `#${main.id}`;
+    link.textContent = "Skip to main content";
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      main.focus();
+      main.scrollIntoView();
+    });
+    document.body.prepend(link);
+  }
+
   function init() {
+    addSkipLink();
     buildPanel();
   }
 

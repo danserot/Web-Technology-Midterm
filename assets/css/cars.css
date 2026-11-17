@@ -327,7 +327,6 @@
   .type-pill { padding: 6px 11px; }
 }
 
-/* Sorting and pagination */
 .results-range { margin: 0; color: var(--text-soft, #6f7b74); font-size: 12px; }
 .cars-pagination {
   display: flex;
@@ -352,3 +351,8 @@
 .page-button:focus-visible { outline: 3px solid var(--focus, var(--deep-green)); outline-offset: 3px; }
 .page-button[aria-current="page"] { color: var(--deep-green); background: var(--lime); border-color: var(--lime); }
 .page-button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+@media (max-width: 575px) {
+  .cars-pagination { gap: 6px; }
+  .page-button { padding: 0 10px; }
+}

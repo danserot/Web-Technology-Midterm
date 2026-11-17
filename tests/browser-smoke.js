@@ -65,6 +65,37 @@ async (page) => {
   await page.locator("#priceCurrency").selectOption("USD");
   assert(await text("#confirmationText").then((value) => value.includes("$492.00")), "Visible confirmation refreshes");
 
+  const bookingCards = page.locator("#myBookingsList .booking-card");
+  assert(await bookingCards.count() === 1, "Confirmation immediately displays the saved booking");
+  const bookingId = await bookingCards.first().getAttribute("data-booking-id");
+  assert(bookingId, "Saved booking has an ID");
+  await page.reload();
+  await waitForState("success");
+  assert(await bookingCards.count() === 1, "Saved booking survives reload");
+  await bookingCards.first().locator("[data-booking-edit]").click();
+  assert(await page.locator("#editDropoff").inputValue() === "2099-03-04", "Editor loads the saved dates");
+  await page.locator("#editDropoff").fill("2099-02-28");
+  await page.getByRole("button", { name: "Save changes", exact: true }).click();
+  assert((await text("#editBookingError")).includes("after pick-up"), "Editor rejects invalid dates");
+  await page.locator("#editDropoff").fill("2099-03-05");
+  await page.locator("#editInsurance").check();
+  assert(await text("#editBookingTotal") === "$716.00", "Editor recalculates dates and extras");
+  await page.getByRole("button", { name: "Save changes", exact: true }).click();
+  assert(await bookingCards.first().getAttribute("data-booking-id") === bookingId, "Editing preserves booking ID");
+  await page.reload();
+  await waitForState("success");
+  assert(await text("#myBookingsList [data-booking-total]") === "$716.00", "Edited price survives reload");
+
+  page.once("dialog", (dialog) => dialog.dismiss());
+  await bookingCards.first().locator("[data-booking-delete]").click();
+  assert(await bookingCards.count() === 1, "Cancelling deletion keeps the booking");
+  page.once("dialog", (dialog) => dialog.accept());
+  await bookingCards.first().locator("[data-booking-delete]").click();
+  await page.reload();
+  await waitForState("success");
+  assert(await bookingCards.count() === 0, "Deletion survives reload");
+  assert((await text("#myBookingsStatus")).includes("no saved bookings"), "Empty state is restored");
+
   await visit("index.html");
   await waitForState("success");
   await page.locator("#priceCurrency").selectOption("EUR");
@@ -115,5 +146,5 @@ async (page) => {
   }
   assert(errors.length === 0, `Page errors: ${errors.join(", ")}`);
   assert(brokenResources.length === 0, `Broken local resources: ${brokenResources.join(", ")}`);
-  return { passed: true, requests, pages: 6, scenarios: "currency, filters, booking, favorites, comparison, API states, retry, corrupt/blocked storage, mobile navigation", errors, brokenResources };
+  return { passed: true, requests, pages: 6, scenarios: "currency, filters, booking wizard and CRUD, favorites, comparison, API states, retry, corrupt/blocked storage, mobile navigation", errors, brokenResources };
 }

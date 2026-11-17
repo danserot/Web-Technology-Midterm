@@ -17,9 +17,14 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="dark"] :is(.summary-category, .summary-price strong, .trip-change, .filter-reset,
-  .cars-empty, .results-note a, .category-link, .editor-book-link, .table-category, .car-category) {
+  .cars-empty, .results-note a, .category-link, .editor-book-link, .table-category, .editor-image .car-category) {
   color: var(--link-accent);
 }
+
+html[data-theme="dark"] .collection-city { background: #3b3420; }
+html[data-theme="dark"] .collection-weekend { background: #26331f; }
+html[data-theme="dark"] .collection-electric { background: #1f323b; }
+html[data-theme="dark"] .collection-premium { background: #3b2a25; }
 
 html[data-text-size="large"] body { zoom: 1.15; }
 html[data-text-size="xlarge"] body { zoom: 1.3; }

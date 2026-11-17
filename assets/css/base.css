@@ -58,7 +58,7 @@ img {
 .site-nav {
   min-height: 64px;
   padding: 0 30px;
-  background: var(--white);
+  background: var(--surface, var(--white));
 }
 .brand,
 .footer-brand {
@@ -79,7 +79,7 @@ img {
   font-size: 12px;
 }
 .nav-link {
-  color: #637069;
+  color: var(--text-soft, #637069);
   font-size: 11px;
   font-weight: 500;
 }

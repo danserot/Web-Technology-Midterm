@@ -139,6 +139,12 @@ Shared scripts extend window.RentoCar without replacing existing services. jQuer
 
 To demonstrate the feature, open `booking.html?carId=1`. Book a Porsche Macan for three days with insurance and a child seat. The total is USD 547. Confirm using sample contacts, then create a second booking. Edit the Porsche booking to four days and remove the child seat. Its new total is USD 716 with insurance. Delete the other booking and reload to check that the edited booking remains.
 
+## Danial's catalog sorting, pagination and accessibility 
+
+- `cars.html` + `assets/js/cars.js`: "Sort by" select (recommended, price low/high, name) and pagination, 6 cars per page. The list is built as filters -> sort (on a copy) -> page slice. Changing a filter, search or sort returns to page 1.
+- `assets/js/accessibility.js` (class `AccessibilityPreferences`) + `assets/css/preferences.css`: theme (light/dark) and text size panel on every page, saved in `localStorage` under `accessibilityPreferences` via `RentoCar.storage`. Also adds a "Skip to main content" link.
+- Shared CSS now reads theme variables with fallbacks (`var(--surface, var(--white))`, `--tint`, `--text-soft`), so the light theme looks exactly as before.
+
 ## Verification and demonstrations
 
 Run dependency-free service tests with Node.js:

@@ -17,7 +17,7 @@
   flex: 0 0 auto;
   align-items: center;
   gap: 7px;
-  color: #9aa39e;
+  color: var(--text-soft, #9aa39e);
   font-size: 9px;
   font-weight: 600;
 }
@@ -29,7 +29,7 @@
   place-items: center;
   border: 1px solid var(--line);
   border-radius: 50%;
-  background: var(--white);
+  background: var(--surface, var(--white));
   font-size: 9px;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .progress-step.completed {
-  color: #718078;
+  color: var(--text-soft, #718078);
 }
 
 .progress-step.completed .step-number {
@@ -114,14 +114,14 @@
   border: 1px solid var(--line);
   border-radius: 9px;
   color: var(--ink);
-  background: var(--white);
+  background: var(--surface, var(--white));
   font-family: "DM Sans", sans-serif;
   font-size: 10px;
   box-shadow: none;
 }
 
 .booking-field .form-control::placeholder {
-  color: #a7afa9;
+  color: var(--text-soft, #a7afa9);
 }
 
 .booking-field .form-control:focus {
@@ -169,7 +169,7 @@
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 15px;
-  background: var(--white);
+  background: var(--surface, var(--white));
   box-shadow: var(--shadow);
 }
 
@@ -208,7 +208,7 @@
   padding: 4px 8px;
   border-radius: 999px;
   color: var(--deep-green);
-  background: #edf3ed;
+  background: var(--tint, #edf3ed);
   font-size: 8px;
   font-weight: 600;
 }
@@ -284,7 +284,7 @@
   padding: 30px;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  background: var(--white);
+  background: var(--surface, var(--white));
   box-shadow: var(--shadow);
   text-align: center;
 }
@@ -297,7 +297,7 @@
   display: block;
   min-height: 14px;
   margin-top: 4px;
-  color: #c62828;
+  color: var(--danger, #c62828);
   font-size: 11px;
 }
 

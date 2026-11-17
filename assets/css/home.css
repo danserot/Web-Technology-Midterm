@@ -12,8 +12,8 @@
   margin-bottom: 16px;
   padding: 5px 9px;
   border-radius: 999px;
-  color: #637a6c;
-  background: #edf3ed;
+  color: var(--text-soft, #637a6c);
+  background: var(--tint, #edf3ed);
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -39,7 +39,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  color: #78847d;
+  color: var(--text-soft, #78847d);
   font-size: 10px;
 }
 .trust-list li + li {
@@ -78,9 +78,9 @@
   gap: 6px;
   padding: 7px 10px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.94);
+  background: var(--surface-glass, rgba(255, 255, 255, 0.94));
   box-shadow: 0 4px 12px rgba(18, 35, 27, 0.1);
-  color: #55635b;
+  color: var(--text-soft, #55635b);
   font-size: 9px;
 }
 .badge-dot {
@@ -100,9 +100,9 @@
   align-items: center;
   gap: 8px;
   padding: 6px 7px;
-  border: 1px solid #e8ede9;
+  border: 1px solid var(--line);
   border-radius: 14px;
-  background: var(--white);
+  background: var(--surface, var(--white));
   box-shadow: var(--shadow);
 }
 .search-field {
@@ -114,7 +114,7 @@
 .search-field span {
   display: block;
   margin-bottom: 2px;
-  color: #8a958e;
+  color: var(--text-soft, #8a958e);
   font-size: 9px;
 }
 .search-field input {
@@ -157,7 +157,7 @@
 }
 .section-heading p {
   margin: 0;
-  color: #8a958e;
+  color: var(--text-soft, #8a958e);
   font-size: 10px;
 }
 .text-link {
@@ -178,9 +178,9 @@
 }
 .car-card {
   padding: 7px 7px 10px;
-  border: 1px solid #e8ede9;
+  border: 1px solid var(--line);
   border-radius: 13px;
-  background: var(--white);
+  background: var(--surface, var(--white));
   box-shadow: var(--shadow);
 }
 .car-image-wrap {
@@ -201,8 +201,8 @@
   padding: 0;
   border: 0;
   border-radius: 50%;
-  color: #87928b;
-  background: rgba(255, 255, 255, 0.88);
+  color: var(--text-soft, #87928b);
+  background: var(--surface-glass, rgba(255, 255, 255, 0.88));
   font-size: 14px;
   line-height: 20px;
   cursor: pointer;
@@ -220,7 +220,7 @@
 }
 .car-details p {
   margin: 0;
-  color: #919b94;
+  color: var(--text-soft, #919b94);
   font-size: 9px;
 }
 .car-details > strong {
@@ -229,7 +229,7 @@
   font-weight: 600;
 }
 .car-details small {
-  color: #7b8780;
+  color: var(--text-soft, #7b8780);
   font-size: 9px;
   font-weight: 400;
 }
@@ -237,7 +237,7 @@
   display: flex;
   gap: 11px;
   padding: 0 2px;
-  color: #8c978f;
+  color: var(--text-soft, #8c978f);
   font-size: 8px;
 }
 .car-meta span:first-child::before {

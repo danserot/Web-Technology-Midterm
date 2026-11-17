@@ -20,7 +20,7 @@ Open <http://127.0.0.1:4173/>. Use HTTP rather than opening HTML files directly.
 | cars.html | All cars, combined category/price/seats/fuel/name filters and empty results |
 | catolog.html | Curated cars and comparison of up to three vehicles |
 | categories.html | Category links to the filtered fleet |
-| booking.html?carId=2 | Selected car, validated form, rental calculation and demo confirmation |
+| booking.html?carId=2 | Three-step booking, optional extras, live total and My Bookings |
 | home.html | Existing supplementary home page |
 
 USD/EUR/GBP controls appear on Home, Cars, Catalog and Booking. A selection updates card prices, favorites, comparison, booking totals and an already visible confirmation. The preference survives navigation when browser storage is available.
@@ -37,7 +37,7 @@ All application JavaScript is inside assets/js.
 | services/currencyService.js | Shared asynchronous Frankfurter request, timeout, validation, conversion and preference |
 | currencyUi.js | Currency control, request status, retry, price and filter-label updates |
 | cars.js | Calls Car.matchesFilters for real catalog filtering |
-| booking.js | Calls Car.calculateRentalCost for summary and confirmation totals |
+| booking.js | Applies the shared currency service to booking totals and confirmation |
 | search.js, favorites.js, jqueryUi.js | Existing features integrated with common storage and currency services |
 
 ### Model and price rules
@@ -98,7 +98,7 @@ storage.remove("selectedCarId");                           // boolean
 storage.lastError; // null or { operation, key, reason }
 ```
 
-All direct localStorage calls are confined to storageService.js, including access to the storage getter. Missing keys use the supplied fallback. Corrupt JSON, invalid structures, thrown validators, disabled storage, quota failures and deletion errors do not stop the page. Unsupported JSON values and cyclic objects are rejected before writing. Failure dispatches rentocar:storage-error without exposing stored contents. UI interactions continue in memory when persistence is unavailable.
+All direct localStorage calls are confined to storageService.js, including access to the storage getter. Missing keys use the supplied fallback. Corrupt JSON, invalid structures, thrown validators, disabled storage, quota failures and deletion errors do not stop the page. Unsupported JSON values and cyclic objects are rejected before writing. Failure dispatches rentocar:storage-error without exposing stored contents. Features with an in-memory fallback remain usable when persistence is unavailable. Booking confirmation requires a successful write.
 
 Existing keys are preserved without a destructive migration:
 
@@ -108,8 +108,9 @@ Existing keys are preserved without a destructive migration:
 | rentalSearch | { location, pickup, return } | Non-empty location, valid calendar dates/local date-times |
 | favoriteCarIds | Array of positive integers | validators.favoriteIds; unknown cars removed when reading favorites |
 | preferredCurrency | USD, EUR or GBP string | Supported currency only |
+| rentalBookings | Array of saved bookings | Unique IDs, valid dates, contacts, extras and non-negative USD totals |
 
-Booking contact details are not persisted. New features should use this service with a suitable validator instead of adding direct localStorage access.
+Confirmed demo bookings, including contact details, are stored in the current browser. Use sample contact data when demonstrating the app. New features should use the shared storage service with a suitable validator.
 
 ### Integration contract
 
@@ -119,10 +120,24 @@ Local scripts load at the end of body in this order on all four currency pages:
 2. models/Car.js
 3. carsData.js
 4. services/currencyService.js
-5. Page scripts: cars.js, booking.js, or Home/Catalog scripts
+5. Page scripts. On Booking, load `bookingService.js` before `booking.js` and `myBookings.js`.
 6. currencyUi.js
 
 Shared scripts extend window.RentoCar without replacing existing services. jQuery loads before jqueryUi.js. Bootstrap enables mobile navigation on every page. Site links and local asset paths are relative so deployment under a repository subpath works. Curated cards and fleet links pass carId explicitly; the stored selection remains a fallback.
+
+## Abi-Mansur's booking features
+
+- **Booking** guides users through trip and extras, contact details, and review. Each step validates its own fields and Back retains entered values.
+- **Extras** cost USD 15 per rental day for insurance and USD 10 per trip for a child seat. The app calculates the total in USD and displays the selected currency.
+- **My Bookings** is a section on the Booking page. Confirmed bookings appear immediately and survive reloads. **Edit** changes the dates and extras and recalculates the total. **Delete** asks for confirmation.
+
+| File | Responsibility |
+| --- | --- |
+| `assets/js/booking.js` | Step navigation, validation, summary and confirmation |
+| `assets/js/services/bookingService.js` | Date and price rules, validation and CRUD through the shared storage service |
+| `assets/js/myBookings.js` | Saved booking cards, inline editor and delete confirmation |
+
+To demonstrate the feature, open `booking.html?carId=1`. Book a Porsche Macan for three days with insurance and a child seat. The total is USD 547. Confirm using sample contacts, then create a second booking. Edit the Porsche booking to four days and remove the child seat. Its new total is USD 716 with insurance. Delete the other booking and reload to check that the edited booking remains.
 
 ## Verification and demonstrations
 
@@ -142,7 +157,7 @@ npx --yes --package @playwright/cli playwright-cli -s=rentocar run-code --filena
 npx --yes --package @playwright/cli playwright-cli -s=rentocar close
 ```
 
-The browser script controls API responses through Playwright routing. It checks all request states, retry, filtering, currency persistence, booking/confirmation, favorites, comparison, six pages, corrupt/blocked storage and mobile navigation. Controlled responses are fixtures, not live API proof. It clears storage only in its isolated browser session. Use a separate normal browser visit to verify real Frankfurter rates.
+The browser script controls API responses through Playwright routing. It checks all request states, retry, filtering, currency persistence, the booking wizard and saved-booking CRUD, favorites, comparison, six pages, corrupt/blocked storage and mobile navigation. Controlled responses are fixtures, not live API proof. It clears storage only in its isolated browser session. Use a separate normal browser visit to verify real Frankfurter rates.
 
 For a manual defense demo, use DevTools Network throttling to show loading; switch offline and reload to show USD fallback; switch online and press Try again. The browser script demonstrates empty and invalid-data states deterministically. To demonstrate corrupt storage, set rentalSearch to {broken or favoriteCarIds to null in DevTools Application > Local Storage and reload. The service tests inject quota/access failures to demonstrate failed writes without changing browser settings.
 
@@ -151,7 +166,7 @@ For a manual defense demo, use DevTools Network throttling to show loading; swit
 Team SE-2525:
 
 - Artem Khloptsev: Car model, external API, common services, integration and release documentation in this change.
-- Khasan Abi-Mansur: booking area; existing booking form and confirmation are preserved and integrated with common services.
+- Khasan Abi-Mansur: three-step booking, rental extras, and creation, viewing, editing and deletion of saved demo bookings.
 - Nurumbet Danial: catalog/accessibility area; filtering, categories, favorites and comparison remain available through shared interfaces.
 
 This README describes the current integrated implementation. Separate final contributions from other participants must be checked against their actual branches before counting them as completed new features.

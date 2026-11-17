@@ -1,159 +1,233 @@
 (() => {
-  const { storage, currency, getCarById, cars } = window.RentoCar;
-  const bookingForm = document.getElementById("bookingForm");
-  if (!bookingForm) return;
+  
+  const { storage, currency, getCarById, cars, bookings } = window.RentoCar;
+  const byId = (id) => document.getElementById(id);
+  const form = byId("bookingForm");
+  if (!form) return;
 
-  const summaryImage = document.getElementById("summaryImage");
-  const summaryName = document.getElementById("summaryName");
-  const summaryDescription = document.getElementById("summaryDescription");
-  const summaryBadge = document.getElementById("summaryBadge");
-  const summaryPickup = document.getElementById("summaryPickup");
-  const summaryReturn = document.getElementById("summaryReturn");
-  const summaryDays = document.getElementById("summaryDays");
-  const summaryTotal = document.getElementById("summaryTotal");
-  const summaryLocation = document.getElementById("summaryLocation");
-  const pickupInput = document.getElementById("pickupDate");
-  const returnInput = document.getElementById("returnDate");
-  const fullNameInput = document.getElementById("fullName");
-  const emailInput = document.getElementById("email");
-  const phoneInput = document.getElementById("phone");
-  const termsInput = document.getElementById("terms");
-  const confirmationBox = document.getElementById("confirmation");
-  const confirmationText = document.getElementById("confirmationText");
-  const detailsStep = document.getElementById("detailsStep");
-  const confirmationLine = document.getElementById("confirmationLine");
-  const confirmationStep = document.getElementById("confirmationStep");
+  const panels = [...form.querySelectorAll("[data-booking-step]")];
+  const progressSteps = [...document.querySelectorAll(".booking-progress .progress-step")];
+  const progressLines = [...document.querySelectorAll(".booking-progress .progress-line")];
+  const backButton = byId("bookingBack");
+  const continueButton = byId("bookingContinue");
+  const confirmation = byId("confirmation");
 
-  const params = new URLSearchParams(window.location.search);
+  const pickup = byId("pickupDate");
+  const dropoff = byId("returnDate");
+  const fullName = byId("fullName");
+  const email = byId("email");
+  const phone = byId("phone");
+  const terms = byId("terms");
+  const insurance = byId("insurance");
+  const childSeat = byId("childSeat");
+
+  const { insurancePerDay, childSeatPerTrip } = bookings.rates;
+  const requestedId = new URLSearchParams(window.location.search).get("carId");
+  const requestedCar = requestedId === null ? null : getCarById(requestedId);
   const storedCarId = storage.read("selectedCarId", 1, storage.validators.carId);
-  const selectedCar = getCarById(params.get("carId") || storedCarId) || cars[0];
+  const selectedCar = requestedCar || getCarById(storedCarId) || cars[0];
+  let currentStep = 0;
+  let confirmed = false;
 
-  function getDays(pickup, dropoff) {
-    if (!pickup || !dropoff) return 0;
-    const days = (Date.parse(dropoff) - Date.parse(pickup)) / 86400000;
-    return Number.isSafeInteger(days) && days > 0 ? days : 0;
-  }
-
-  function formatDate(value) {
-    if (!value) return "—";
-    return new Date(value).toLocaleDateString("en-US", {
-      month: "long", day: "numeric", year: "numeric", timeZone: "UTC",
-    });
-  }
-
-  function updateConfirmationText() {
-    const days = getDays(pickupInput.value, returnInput.value);
-    const total = selectedCar.calculateRentalCost(days);
-    confirmationText.textContent =
-      `${selectedCar.name} · ${formatDate(pickupInput.value)} – ${formatDate(returnInput.value)}` +
-      ` · ${days} days · ${currency.format(total)}`;
-  }
-
-  function updateSummary() {
-    const days = getDays(pickupInput.value, returnInput.value);
-    const total = selectedCar.calculateRentalCost(days);
-    summaryPickup.textContent = formatDate(pickupInput.value);
-    summaryReturn.textContent = formatDate(returnInput.value);
-    summaryDays.textContent = `${days} days x ${currency.format(selectedCar.price)} / day`;
-    summaryTotal.textContent = currency.format(total);
-    if (confirmationBox.classList.contains("show")) updateConfirmationText();
-  }
-
-  function getToday() {
+  function today() {
     const now = new Date();
     const month = String(now.getMonth() + 1).padStart(2, "0");
     const day = String(now.getDate()).padStart(2, "0");
     return `${now.getFullYear()}-${month}-${day}`;
   }
 
-  function validateFullName() {
-    return fullNameInput.value.trim().length < 3 ? "Name must be at least 3 characters" : "";
+  function rentalDays() {
+    return bookings.rentalDays(pickup.value, dropoff.value);
   }
 
-  function validateEmail() {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())
-      ? "" : "Enter a valid email, e.g. you@example.com";
+  function selectedExtras() {
+    return { insurance: insurance.checked, childSeat: childSeat.checked };
   }
 
-  function validatePhone() {
-    const digits = phoneInput.value.replace(/\D/g, "");
-    return /^\+?[0-9\s()-]+$/.test(phoneInput.value.trim()) && digits.length >= 10 && digits.length <= 15
-      ? "" : "Enter a valid phone, e.g. +7 700 000 00 00";
+  function formatDate(value) {
+    return value ? new Date(value).toLocaleDateString("en-US", {
+      month: "long", day: "numeric", year: "numeric", timeZone: "UTC",
+    }) : "—";
   }
 
-  function validatePickup() {
-    if (!pickupInput.value) return "Choose a pick-up date";
-    return pickupInput.value < getToday() ? "Pick-up date cannot be in the past" : "";
+  function updateSummary() {
+  
+    const days = rentalDays();
+    const { extrasUSD, totalUSD } = bookings.quote(selectedCar, days, selectedExtras());
+
+    byId("insurancePrice").textContent = currency.format(insurancePerDay);
+    byId("childSeatPrice").textContent = currency.format(childSeatPerTrip);
+    byId("summaryPickup").textContent = formatDate(pickup.value);
+    byId("summaryReturn").textContent = formatDate(dropoff.value);
+    byId("summaryDays").textContent = days > 0
+      ? `${days} ${days === 1 ? "day" : "days"} × ${currency.format(selectedCar.price)} / day`
+      : "Choose dates to calculate the total.";
+    byId("summaryExtras").textContent = days > 0 ? currency.format(extrasUSD) : "—";
+    byId("summaryTotal").textContent = days > 0 ? currency.format(totalUSD) : "—";
+
+    const trip = `${selectedCar.name} · ${formatDate(pickup.value)} – ${formatDate(dropoff.value)}`;
+    const extras = [];
+    if (insurance.checked) extras.push("Insurance");
+    if (childSeat.checked) extras.push("Child seat");
+
+    byId("bookingReviewTrip").textContent = trip;
+    byId("bookingReviewExtras").textContent = `Extras: ${extras.join(", ") || "None"}`;
+    byId("bookingReviewContact").textContent =
+      `${fullName.value.trim()} · ${email.value.trim()} · ${phone.value.trim()}`;
+    byId("bookingReviewTotal").textContent = `Total: ${currency.format(totalUSD)}`;
+
+    if (confirmed) {
+      byId("confirmationText").textContent = `${trip} · ${currency.format(totalUSD)}`;
+    }
   }
 
-  function validateReturn() {
-    if (!returnInput.value) return "Choose a return date";
-    return returnInput.value <= pickupInput.value ? "Return date must be after pick-up date" : "";
-  }
-
-  const fields = [
-    { input: fullNameInput, validate: validateFullName },
-    { input: emailInput, validate: validateEmail },
-    { input: phoneInput, validate: validatePhone },
-    { input: pickupInput, validate: validatePickup },
-    { input: returnInput, validate: validateReturn },
-    { input: termsInput, validate: () => termsInput.checked ? "" : "You must agree to the terms" },
+  const stepFields = [
+    [
+      { input: pickup, validate: () => {
+        if (!pickup.value) return "Choose a pick-up date";
+        return pickup.value < today() ? "Pick-up date cannot be in the past" : "";
+      } },
+      { input: dropoff, validate: () => {
+        if (!dropoff.value) return "Choose a return date";
+        return rentalDays() === 0 ? "Return date must be after pick-up date" : "";
+      } },
+    ],
+    [
+      { input: fullName, validate: () =>
+        fullName.value.trim().length < 3 ? "Name must be at least 3 characters" : "" },
+      { input: email, validate: () =>
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())
+          ? "" : "Enter a valid email, e.g. you@example.com" },
+      { input: phone, validate: () => {
+        const value = phone.value.trim();
+        const digits = value.replace(/\D/g, "");
+        return /^\+?[0-9\s()-]+$/.test(value) && digits.length >= 10 && digits.length <= 15
+          ? "" : "Enter a valid phone, e.g. +7 700 000 00 00";
+      } },
+    ],
+    [
+      { input: terms, validate: () => terms.checked ? "" : "You must agree to the terms" },
+    ],
   ];
 
-  function validateField(field) {
-    const message = field.validate();
-    document.getElementById(`${field.input.id}Error`).textContent = message;
-    field.input.classList.toggle("is-invalid", message !== "");
-    field.input.setAttribute("aria-invalid", String(message !== ""));
+  function validateField({ input, validate }) {
+    const message = validate();
+    byId(`${input.id}Error`).textContent = message;
+    input.classList.toggle("is-invalid", Boolean(message));
+    input.setAttribute("aria-invalid", String(Boolean(message)));
     return message === "";
   }
 
-  bookingForm.addEventListener("submit", (event) => {
+  function updateProgress() {
+    progressSteps.forEach((step, index) => {
+      const active = index === currentStep && !confirmed;
+      const completed = index < currentStep || confirmed;
+      step.classList.toggle("active", active);
+      step.classList.toggle("completed", completed);
+      step.querySelector(".step-number").textContent = completed ? "✓" : String(index + 1);
+
+      if (active) step.setAttribute("aria-current", "step");
+      else step.removeAttribute("aria-current");
+    });
+    progressLines.forEach((line, index) => {
+      line.classList.toggle("completed", index < currentStep || confirmed);
+    });
+  }
+
+  function showStep(step, moveFocus = true) {
+    currentStep = step;
+    panels.forEach((panel, index) => { panel.hidden = index !== step; });
+    backButton.hidden = step === 0;
+    continueButton.textContent = step === panels.length - 1 ? "Confirm booking" : "Continue";
+    updateProgress();
+    updateSummary();
+    if (moveFocus) panels[step].querySelector("h2").focus();
+  }
+
+  form.addEventListener("submit", (event) => {
     event.preventDefault();
-    const validFields = fields.map(validateField);
-    if (validFields.includes(false)) {
-      fields[validFields.indexOf(false)].input.focus();
+    if (confirmed) return;
+
+    const fields = stepFields[currentStep];
+    const invalidIndex = fields.map(validateField).indexOf(false);
+    if (invalidIndex !== -1) {
+      fields[invalidIndex].input.focus();
       return;
     }
 
-    updateConfirmationText();
-    bookingForm.hidden = true;
-    confirmationBox.classList.add("show");
-    detailsStep.classList.remove("active");
-    detailsStep.classList.add("completed");
-    detailsStep.querySelector(".step-number").textContent = "✓";
-    confirmationLine.classList.add("completed");
-    confirmationStep.classList.add("active");
-    confirmationStep.querySelector(".step-number").textContent = "✓";
+    if (currentStep < panels.length - 1) {
+      showStep(currentStep + 1);
+      return;
+    }
+
+    const saveError = byId("bookingSaveError");
+    saveError.textContent = "";
+
+    const saved = bookings.create({
+      carId: selectedCar.id,
+      pickup: pickup.value,
+      dropoff: dropoff.value,
+      location: byId("summaryLocation").textContent.trim(),
+      contact: {
+        name: fullName.value.trim(),
+        email: email.value.trim(),
+        phone: phone.value.trim(),
+      },
+      extras: selectedExtras(),
+    });
+
+    if (!saved) {
+      saveError.textContent = "We couldn't save your booking in this browser. Please try again.";
+      return;
+    }
+
+    confirmed = true;
+    form.hidden = true;
+    confirmation.classList.add("show");
+    updateProgress();
+    updateSummary();
+    byId("bookingConfirmedHeading").focus();
+    window.dispatchEvent(new Event("rentocar:bookings-change"));
   });
 
-  for (const field of fields) {
+  backButton.addEventListener("click", () => showStep(currentStep - 1));
+
+  for (const field of stepFields.flat()) {
     field.input.setAttribute("aria-describedby", `${field.input.id}Error`);
     field.input.addEventListener("input", () => validateField(field));
     field.input.addEventListener("change", () => validateField(field));
   }
 
-  pickupInput.addEventListener("change", () => {
+  pickup.addEventListener("change", () => {
+    if (dropoff.value) validateField(stepFields[0][1]);
     updateSummary();
-    if (returnInput.value) validateField(fields[4]);
   });
-  returnInput.addEventListener("change", updateSummary);
+  dropoff.addEventListener("change", updateSummary);
+  insurance.addEventListener("change", updateSummary);
+  childSeat.addEventListener("change", updateSummary);
   window.addEventListener("rentocar:currency-change", updateSummary);
 
-  summaryImage.src = selectedCar.image;
-  summaryImage.alt = selectedCar.name;
-  summaryName.textContent = selectedCar.name;
-  summaryDescription.textContent = selectedCar.description;
-  summaryBadge.textContent = selectedCar.badge ||
+  if (requestedId !== null && !requestedCar) {
+    const notice = byId("bookingCarNotice");
+    notice.textContent = `The requested car was not found. Showing ${selectedCar.name}.`;
+    notice.hidden = false;
+  }
+
+  byId("summaryImage").src = selectedCar.image;
+  byId("summaryImage").alt = selectedCar.name;
+  byId("summaryName").textContent = selectedCar.name;
+  byId("summaryDescription").textContent = selectedCar.description;
+  byId("summaryBadge").textContent = selectedCar.badge ||
     selectedCar.category.charAt(0).toUpperCase() + selectedCar.category.slice(1);
   storage.write("selectedCarId", selectedCar.id, storage.validators.carId);
-  pickupInput.min = getToday();
 
+  pickup.min = today();
   const search = storage.read("rentalSearch", null, storage.validators.rentalSearch);
   if (search) {
-    pickupInput.value = search.pickup.slice(0, 10);
-    returnInput.value = search.return.slice(0, 10);
-    summaryLocation.textContent = search.location || "Astana Downtown";
+    pickup.value = search.pickup.slice(0, 10);
+    dropoff.value = search.return.slice(0, 10);
+    byId("summaryLocation").textContent = search.location;
   }
-  updateSummary();
+
+  showStep(0, false);
 })();

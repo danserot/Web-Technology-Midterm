@@ -1,4 +1,4 @@
-// Run through Playwright CLI after opening the site's cars.html page.
+
 async (page) => {
   const base = new URL(".", page.url()).href;
   const errors = [];
@@ -49,11 +49,18 @@ async (page) => {
   assert(await text("#summaryTotal") === "€442.80", "Model calculates three-day EUR total");
   await page.locator("#priceCurrency").selectOption("GBP");
   assert(await text("#summaryTotal") === "£369.00", "Booking total changes currency");
+
+ 
+  await page.locator("#bookingContinue").click();
   await page.locator("#fullName").fill("Demo Visitor");
   await page.locator("#email").fill("demo@example.com");
   await page.locator("#phone").fill("+77001234567");
+
+  
+  await page.locator("#bookingContinue").click();
   await page.locator("#terms").check();
-  await page.locator("#bookingForm button[type=submit]").click();
+  await page.locator("#bookingContinue").click();
+
   assert(await text("#confirmationText").then((value) => value.includes("£369.00")), "Confirmation price");
   await page.locator("#priceCurrency").selectOption("USD");
   assert(await text("#confirmationText").then((value) => value.includes("$492.00")), "Visible confirmation refreshes");
@@ -96,7 +103,7 @@ async (page) => {
   await page.locator(".navbar-toggler").click();
   assert(await page.getByRole("link", { name: "Booking", exact: true }).isVisible(), "Mobile navigation works");
 
-  // A blocked storage getter must not stop any page's scripts.
+
   await page.addInitScript(() => Object.defineProperty(window, "localStorage", {
     get() { throw new DOMException("Storage disabled", "SecurityError"); },
   }));

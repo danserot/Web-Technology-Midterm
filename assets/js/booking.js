@@ -20,7 +20,7 @@
   const insurance = byId("insurance");
   const childSeat = byId("childSeat");
 
-  // ИЗМЕНЕНИЕ 1. Ставки и расчёты хранятся в USD.
+  
   const insurancePerDay = 15;
   const childSeatPerTrip = 10;
   const requestedId = new URLSearchParams(window.location.search).get("carId");
@@ -82,7 +82,7 @@
     }
   }
 
-  // ИЗМЕНЕНИЕ 2. Каждому шагу соответствует свой набор проверок.
+  
   const stepFields = [
     [
       { input: pickup, validate: () => {
@@ -136,7 +136,7 @@
     });
   }
 
-  // ИЗМЕНЕНИЕ 3. Меняем видимый шаг, сохраняя поля внутри формы.
+ 
   function showStep(step, moveFocus = true) {
     currentStep = step;
     panels.forEach((panel, index) => { panel.hidden = index !== step; });

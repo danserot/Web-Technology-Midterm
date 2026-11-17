@@ -153,6 +153,15 @@
                 <option value="Electric">Electric</option>
               </select>
             </div>
+            <div class="filter-field">
+              <label for="sortCars">Sort by</label>
+              <select class="form-select" id="sortCars" name="sort">
+                <option value="default">Recommended</option>
+                <option value="price-asc">Price: low to high</option>
+                <option value="price-desc">Price: high to low</option>
+                <option value="name">Name: A to Z</option>
+              </select>
+            </div>
             <button class="filter-reset" type="reset">Reset all filters</button>
           </div>
         </form>
@@ -163,10 +172,13 @@
 
           <div class="results-bar">
             <p class="results-count" aria-live="polite">Cars found: <span id="resultsCount">0</span></p>
+            <p class="results-range" id="resultsRange"></p>
             <p class="results-trip">Astana Downtown &middot; 15 Oct &ndash; 18 Oct</p>
           </div>
 
           <p class="cars-empty" id="carsEmpty" role="status" hidden>No cars match your search. Try different filters.</p>
+
+          <nav class="cars-pagination" id="carsPagination" aria-label="Car list pages" hidden></nav>
 
           <p class="results-note">
             Nothing fits? Choose <a href="#cat-all">All types</a> and press
@@ -200,5 +212,5 @@
     <script src="assets/js/services/currencyService.js"></script>
     <script src="assets/js/cars.js"></script>
     <script src="assets/js/currencyUi.js"></script>
-  </body>
+</body>
 </html>

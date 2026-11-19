@@ -1,5 +1,4 @@
-// Shared catalog. Other pages can read window.RentoCar.cars and getCarById(id).
-// Prices are demonstration rental rates per day in USD.
+
 (() => {
   const cars = [
     {

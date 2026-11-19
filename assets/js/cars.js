@@ -110,7 +110,6 @@ function filterCars() {
   return window.RentoCar.cars.filter((car) => car.matchesFilters(filters));
 }
 
-// Pipeline: filters -> sort (on a copy, the shared catalog stays untouched) -> page slice.
 function sortCars(list) {
   const compare = sorters[view.sort];
   return compare ? [...list].sort(compare) : list;

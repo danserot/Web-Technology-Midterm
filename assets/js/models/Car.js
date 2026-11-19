@@ -16,7 +16,6 @@
       Object.assign(this, { id, name, category, price, seats, fuel, transmission, description, image, badge });
     }
 
-    // Price bands always use the original USD rate, independent of display currency.
     matchesFilters({ category = "all", price = "all", seats = "all", fuel = "all", query = "" } = {}) {
       const priceMatches = price === "all" ||
         (price === "low" && this.price < 100) ||

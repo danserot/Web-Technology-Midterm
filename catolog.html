@@ -31,6 +31,26 @@
             <span class="brand-mark" aria-hidden="true">R</span>
             <span>RentoCar</span>
           </a>
+          <div class="currency-panel" data-currency-panel>
+            <div class="dropdown currency-control">
+              <button class="currency-trigger" id="priceCurrency" type="button" data-bs-toggle="dropdown"
+                aria-label="Price currency (USD)" aria-expanded="false" aria-controls="currencyMenu"
+                aria-describedby="currencyStatus" disabled>
+                <span class="currency-symbol" data-currency-symbol aria-hidden="true">$</span>
+                <span data-currency-code>USD</span>
+              </button>
+              <div class="dropdown-menu currency-menu" id="currencyMenu" role="group" aria-labelledby="currencyMenuTitle">
+                <p class="currency-menu-title" id="currencyMenuTitle">Display currency</p>
+              </div>
+            </div>
+            <details class="currency-details">
+              <summary aria-label="Exchange rate details"><span aria-hidden="true">i</span></summary>
+              <div class="currency-popover">
+                <p class="currency-status" id="currencyStatus" data-currency-status role="status">Original prices are shown in USD.</p>
+                <button class="currency-retry" type="button" data-currency-retry hidden>Try again</button>
+              </div>
+            </details>
+          </div>
           <button
             class="navbar-toggler"
             type="button"
@@ -61,7 +81,6 @@
                 <a class="nav-link" href="booking.html">Booking</a>
               </li>
             </ul>
-            <a class="sign-in" href="booking.html">Sign in</a>
             <a class="button button-primary nav-cta" href="booking.html"
               >Book a car <span aria-hidden="true">&#8599;</span></a
             >
@@ -71,19 +90,6 @@
     </header>
 
     <main>
-      <section class="currency-panel container" data-currency-panel aria-label="Price currency">
-        <div class="currency-control">
-          <label for="priceCurrency">Show prices in</label>
-          <select id="priceCurrency" data-currency-select aria-describedby="currencyStatus">
-            <option value="USD">USD / US Dollar</option>
-            <option value="EUR" disabled>EUR / Euro</option>
-            <option value="GBP" disabled>GBP / British Pound</option>
-          </select>
-        </div>
-        <p class="currency-status" id="currencyStatus" data-currency-status role="status" aria-live="polite" aria-atomic="true">Original prices are shown in USD.</p>
-        <button class="currency-retry" type="button" data-currency-retry hidden>Try again</button>
-      </section>
-
   <section class="catalog-hero container">
     <div class="catalog-hero-copy">
       <span class="catalog-eyebrow">Curated collection</span>
@@ -351,6 +357,6 @@
     <script src="assets/js/services/currencyService.js"></script>
     <script src="assets/js/jqueryUi.js"></script>
     <script src="assets/js/currencyUi.js"></script>
-      <script src="assets/js/accessibility.js"></script>
-</body>
+    <script src="assets/js/accessibility.js"></script>
+  </body>
 </html>

@@ -1,4 +1,4 @@
-
+// Run through Playwright CLI after opening the site's cars.html page.
 async (page) => {
   const base = new URL(".", page.url()).href;
   const errors = [];
@@ -24,6 +24,12 @@ async (page) => {
   const waitForState = (status) => page.waitForFunction((expected) =>
     window.RentoCar?.currency?.getState().status === expected, status);
   const text = (selector) => page.locator(selector).first().textContent();
+  const currencyTrigger = page.locator("#priceCurrency");
+  const currencyOption = (code) => page.locator(`[data-currency-option="${code}"]`);
+  const chooseCurrency = async (code) => {
+    await currencyTrigger.click();
+    await currencyOption(code).click();
+  };
 
   await page.evaluate(() => {
     localStorage.clear();
@@ -35,9 +41,19 @@ async (page) => {
   await visit("cars.html");
   await waitForState("success");
   assert(requests === 1, "Catalog must use one shared API request");
-  assert(await page.locator("#carGrid [data-car]").count() === 20, "All cars render");
+  assert(await text("#resultsCount") === "20", "All cars are counted in the catalog");
+  assert(await page.locator("#carGrid [data-car]").count() === 6, "The first page renders six cars");
   assert(await page.evaluate(() => window.RentoCar.cars.every((car) => car instanceof window.RentoCar.Car)), "Catalog uses Car instances");
-  await page.locator("#priceCurrency").selectOption("EUR");
+  await currencyTrigger.press("ArrowDown");
+  assert(await currencyOption("USD").evaluate((option) => option === document.activeElement), "ArrowDown opens the currency list");
+  await page.keyboard.press("ArrowDown");
+  assert(await currencyOption("EUR").evaluate((option) => option === document.activeElement), "ArrowDown navigates currencies");
+  await page.keyboard.press("Enter");
+  assert(await currencyOption("EUR").getAttribute("aria-pressed") === "true", "Enter selects the focused currency");
+  assert(await currencyTrigger.getAttribute("aria-expanded") === "false", "Currency list closes after selection");
+  await page.getByRole("button", { name: "Next page", exact: true }).click();
+  assert(await text("#resultsRange") === "Showing 7–12", "Catalog advances to the second page");
+  assert((await text("#carGrid [data-price-usd]")).startsWith("€"), "New page renders prices in the selected currency");
   await page.locator("#carSearch").fill("Porsche");
   assert(await text("#resultsCount") === "1", "Model filters catalog");
   assert(await text("#carGrid [data-price-usd]") === "€147.60", "EUR catalog price");
@@ -47,26 +63,26 @@ async (page) => {
   await page.locator("#pickupDate").fill("2099-03-01");
   await page.locator("#returnDate").fill("2099-03-04");
   assert(await text("#summaryTotal") === "€442.80", "Model calculates three-day EUR total");
-  await page.locator("#priceCurrency").selectOption("GBP");
+  await chooseCurrency("GBP");
   assert(await text("#summaryTotal") === "£369.00", "Booking total changes currency");
 
- 
   await page.locator("#bookingContinue").click();
   await page.locator("#fullName").fill("Demo Visitor");
   await page.locator("#email").fill("demo@example.com");
   await page.locator("#phone").fill("+77001234567");
 
-  
   await page.locator("#bookingContinue").click();
   await page.locator("#terms").check();
   await page.locator("#bookingContinue").click();
 
   assert(await text("#confirmationText").then((value) => value.includes("£369.00")), "Confirmation price");
-  await page.locator("#priceCurrency").selectOption("USD");
-  assert(await text("#confirmationText").then((value) => value.includes("$492.00")), "Visible confirmation refreshes");
-
   const bookingCards = page.locator("#myBookingsList .booking-card");
   assert(await bookingCards.count() === 1, "Confirmation immediately displays the saved booking");
+  assert(await text("#myBookingsList [data-booking-total]") === "£369.00", "Saved booking displays the selected currency");
+  await chooseCurrency("USD");
+  assert(await text("#confirmationText").then((value) => value.includes("$492.00")), "Visible confirmation refreshes");
+  assert(await text("#myBookingsList [data-booking-total]") === "$492.00", "Visible saved booking price refreshes");
+
   const bookingId = await bookingCards.first().getAttribute("data-booking-id");
   assert(bookingId, "Saved booking has an ID");
   await page.reload();
@@ -86,10 +102,11 @@ async (page) => {
   await waitForState("success");
   assert(await text("#myBookingsList [data-booking-total]") === "$716.00", "Edited price survives reload");
 
-  page.once("dialog", (dialog) => dialog.dismiss());
+  // The Playwright CLI pauses on native dialogs, so supply each decision in the page.
+  await page.evaluate(() => { window.confirm = () => false; });
   await bookingCards.first().locator("[data-booking-delete]").click();
   assert(await bookingCards.count() === 1, "Cancelling deletion keeps the booking");
-  page.once("dialog", (dialog) => dialog.accept());
+  await page.evaluate(() => { window.confirm = () => true; });
   await bookingCards.first().locator("[data-booking-delete]").click();
   await page.reload();
   await waitForState("success");
@@ -98,7 +115,7 @@ async (page) => {
 
   await visit("index.html");
   await waitForState("success");
-  await page.locator("#priceCurrency").selectOption("EUR");
+  await chooseCurrency("EUR");
   await page.locator(".favorite-button").first().click();
   assert(await text("#favorites-grid [data-price-usd]") === "€88.20", "New favorites use chosen currency");
   await page.reload();
@@ -127,14 +144,14 @@ async (page) => {
   mode = "loading";
   await visit("cars.html");
   await waitForState("loading");
-  assert(await page.locator("#priceCurrency").isDisabled(), "Loading state is visible");
+  assert(await currencyTrigger.isDisabled(), "Loading state is visible");
   await waitForState("success");
   await page.setViewportSize({ width: 390, height: 844 });
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "No mobile horizontal overflow");
+  assert(await currencyTrigger.isVisible(), "Currency can be changed while mobile navigation is collapsed");
   await page.locator(".navbar-toggler").click();
   assert(await page.getByRole("link", { name: "Booking", exact: true }).isVisible(), "Mobile navigation works");
-
-
+  // A blocked storage getter must not stop any page's scripts.
   await page.addInitScript(() => Object.defineProperty(window, "localStorage", {
     get() { throw new DOMException("Storage disabled", "SecurityError"); },
   }));
